@@ -3,7 +3,7 @@ package com.webapp.Eventified.controller;
 import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.LoginRequest;
 import com.webapp.Eventified.dto.RegisterRequest;
-import com.webapp.Eventified.service.UserService;
+import com.webapp.Eventified.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private final UserService userService;
+    private final AuthService authService;
 
-    public AuthController(UserService userService){
-        this.userService = userService;
+    public AuthController(AuthService authService){
+        this.authService = authService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request){
         try {
-            User user = userService.registerUser(request.getUsername(), request.getEmail(), request.getPassword());
+            User user = authService.registerUser(request.getUsername(), request.getEmail(), request.getPassword());
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
         }
         catch (IllegalArgumentException e){
@@ -33,6 +33,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
-        return ResponseEntity.ok(userService.login(request));
+        return ResponseEntity.ok(authService.login(request));
     }
 }

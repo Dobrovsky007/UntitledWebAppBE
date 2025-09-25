@@ -20,9 +20,9 @@ public class SecurityConfigDev {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF (needed for POST/PUT in Swagger)
+                .csrf(csrf -> csrf.disable()) 
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // Allow all endpoints without authentication
+                        .anyRequest().permitAll()
                 );
 
         return http.build();

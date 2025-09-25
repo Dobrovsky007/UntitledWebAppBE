@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -15,18 +17,32 @@ public class User {
     @GeneratedValue
     private UUID id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, name = "username")
     private String username;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, name = "email")
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "password_hash")
     private String passwordHash;
 
-    private boolean enabled = false;
+    @Column(nullable = false, name = "role")
+    private boolean isAdmin = false;
 
-    private Instant createdAt =  Instant.now();
+    @Column(nullable = false, name = "enabled")
+    private boolean isVerified;
+
+    @Column(nullable = false, name = "created_at")
+    private Instant createdAt;
+
+    @Column(nullable = false, name = "trust_score")
+    private int trustScore;
+
+    @Column(nullable = false, name = "number_of_reviews")
+    private int numberOfReviews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<SportUser> sports = new HashSet<>();
 
     public User(){}
 
@@ -34,7 +50,10 @@ public class User {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.enabled = false;
+        this.isVerified = false;
         this.createdAt = Instant.now();
+        this.isAdmin = false;
+        this.trustScore = 0;
+        this.numberOfReviews = 0;
     }
 }
