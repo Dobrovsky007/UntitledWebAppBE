@@ -12,8 +12,15 @@ import java.util.Date;
 public class JWTutil {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long expiration = 1000 * 60 * 60;
+    private final long expiration = 1000 * 60 * 60; // 1 hour in milliseconds
 
+    /**
+     * Generates a JWT token for the specified username.
+     * The token contains the username as the subject and expires after 1 hour.
+     *
+     * @param username the username to be embedded in the token as the subject
+     * @return String the generated JWT token
+     */
     public String generateToken(String username){
         return Jwts.builder()
                 .setSubject(username)
@@ -21,14 +28,5 @@ public class JWTutil {
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
                 .compact();
-    }
-
-    public String extractUsername(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
     }
 }

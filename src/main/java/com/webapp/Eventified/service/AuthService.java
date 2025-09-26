@@ -17,6 +17,17 @@ public class AuthService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JWTutil jwtutil;
 
+    /**
+     * Registers a new user in the system with the provided credentials.
+     * Validates that both username and email are unique before creating the account.
+     * The password is hashed using BCrypt before storage for security.
+     *
+     * @param username the desired username for the new user account
+     * @param email the email address for the new user account
+     * @param password the plain text password which will be hashed before storage
+     * @return User the newly created and saved user entity
+     * @throws IllegalArgumentException if the email or username is already in use
+     */
     public User registerUser( String username, String email, String password) {
 
         if (authRepository.findByEmail(email).isPresent()){
@@ -34,6 +45,14 @@ public class AuthService {
         return savedUser;
     }
 
+    /**
+     * Authenticates a user with the provided login credentials and generates a JWT token.
+     * Validates the username exists and verifies the password against the stored hash.
+     *
+     * @param request the login request containing username and password
+     * @return LoginResponse containing the generated JWT token for authenticated access
+     * @throws IllegalArgumentException if the username is not found or password is incorrect
+     */
     public LoginResponse login(LoginRequest request){
         User user = authRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Username not found"));

@@ -1,6 +1,5 @@
 package com.webapp.Eventified.controller;
 
-import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.LoginRequest;
 import com.webapp.Eventified.dto.RegisterRequest;
 import com.webapp.Eventified.service.AuthService;
@@ -16,14 +15,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
+    /**
+     * Constructs a new AuthController with the specified AuthService.
+     *
+     * @param authService the service layer for authentication-related operations
+     */
     public AuthController(AuthService authService){
         this.authService = authService;
     }
 
+    /**
+     * Registers a new user in the system.
+     * Validates that the username and email are unique before creating the account.
+     *
+     * @param request the registration request containing username, email, and password
+     * @return ResponseEntity with HTTP 201 (Created) and success message if registration succeeds,
+     *         or HTTP 400 (Bad Request) with error message if validation fails
+     */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request){
         try {
-            User user = authService.registerUser(request.getUsername(), request.getEmail(), request.getPassword());
+            authService.registerUser(request.getUsername(), request.getEmail(), request.getPassword());
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
         }
         catch (IllegalArgumentException e){
@@ -31,6 +43,14 @@ public class AuthController {
         }
     }
 
+    /**
+     * Authenticates a user and generates a JWT token for subsequent requests.
+     * Validates the user's credentials against the stored password hash.
+     *
+     * @param request the login request containing username and password
+     * @return ResponseEntity containing the JWT token if authentication succeeds,
+     *         or an error response if credentials are invalid
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
         return ResponseEntity.ok(authService.login(request));
