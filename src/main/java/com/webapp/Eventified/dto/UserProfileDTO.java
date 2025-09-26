@@ -8,7 +8,7 @@ import lombok.Data;
 public class UserProfileDTO {
 
     private String username;
-    private boolean isAdmin;
     private float rating;
     private List<SportDTO> sports;
+    private boolean isVerified;
 }
