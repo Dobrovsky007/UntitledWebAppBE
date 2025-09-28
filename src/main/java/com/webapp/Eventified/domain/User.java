@@ -44,6 +44,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<SportUser> sports = new HashSet<>();
 
+    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
+    private Set<Event> organizedEvents = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<EventParticipant> eventParticipations = new HashSet<>();
+
     public User(){}
 
     public User(String username, String email, String passwordHash){

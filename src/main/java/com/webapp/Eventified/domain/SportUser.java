@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 
 import java.util.UUID;
 
+import com.webapp.Eventified.domain.id.SportUserId;
+
 import jakarta.persistence.*;
 import lombok.Data;
 

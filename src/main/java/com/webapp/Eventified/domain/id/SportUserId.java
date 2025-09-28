@@ -1,4 +1,4 @@
-package com.webapp.Eventified.domain;
+package com.webapp.Eventified.domain.id;
 
 import java.io.Serializable;
 import java.util.UUID;
