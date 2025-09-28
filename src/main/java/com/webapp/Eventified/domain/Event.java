@@ -1,6 +1,5 @@
 package com.webapp.Eventified.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,14 +29,17 @@ public class Event {
     @JoinColumn(name = "organizer_id", nullable = false)
     private User organizer;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Column(name = "sport", nullable = false)
-    private String sport;
+    private Integer sport;
 
     @Column(name = "skill_level", nullable = false)
     private Integer skillLevel;
 
-    @Column(name = "adress", nullable = false)
-    private String adress;
+    @Column(name = "address", nullable = false)
+    private String address;
 
     @Column(name = "latitude", nullable = false)
     private Double latitude;
@@ -65,11 +67,12 @@ public class Event {
 
     public Event(){}
 
-    public Event(User organizer, String sport, Integer skillLevel, String adress, Double latitude, Double longitude, LocalDateTime startTime, LocalDateTime endTime, Integer capacity){
+    public Event(User organizer, String title, Integer sport, Integer skillLevel, String address, Double latitude, Double longitude, LocalDateTime startTime, LocalDateTime endTime, Integer capacity){
         this.organizer = organizer;
+        this.title = title;
         this.sport = sport;
         this.skillLevel = skillLevel;
-        this.adress = adress;
+        this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
         this.startTime = startTime;
