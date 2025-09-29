@@ -29,7 +29,7 @@ public class EventService {
             throw new IllegalArgumentException("Event with the same title already exists for this user.");
         }
 
-        Event event = new Event(organizer.getId(), title, sport, skillLevel, address, latitude, longitude, startTime, endTime, capacity);
+        Event event = new Event(organizer, title, sport, skillLevel, address, latitude, longitude, startTime, endTime, capacity);
 
         return eventRepository.save(event);
 

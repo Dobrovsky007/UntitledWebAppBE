@@ -1,6 +1,5 @@
 package com.webapp.Eventified.controller;
 
-import java.math.BigDecimal;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
