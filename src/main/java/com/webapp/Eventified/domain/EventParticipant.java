@@ -7,9 +7,10 @@ import com.webapp.Eventified.domain.id.EventParticipantId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -19,9 +20,11 @@ import lombok.Data;
 @IdClass(EventParticipantId.class)
 public class EventParticipant {
     
+    @Id
     @Column(name = "user_id")
     private UUID userId;
 
+    @Id
     @Column(name = "event_id")
     private UUID eventId;
 
@@ -31,11 +34,11 @@ public class EventParticipant {
     @Column(name = "joined_at", nullable = false)
     private LocalDateTime joinedAt;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "event_id", insertable = false, updatable = false)
     private Event event;
 

@@ -1,5 +1,6 @@
 package com.webapp.Eventified.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,10 +43,10 @@ public class Event {
     private String address;
 
     @Column(name = "latitude", nullable = false)
-    private Double latitude;
+    private BigDecimal latitude;
 
     @Column(name = "longitude", nullable = false)
-    private Double longitude;
+    private BigDecimal longitude;
 
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
@@ -67,7 +68,7 @@ public class Event {
 
     public Event(){}
 
-    public Event(User organizer, String title, Integer sport, Integer skillLevel, String address, Double latitude, Double longitude, LocalDateTime startTime, LocalDateTime endTime, Integer capacity){
+    public Event(User organizer, String title, Integer sport, Integer skillLevel, String address, BigDecimal latitude, BigDecimal longitude, LocalDateTime startTime, LocalDateTime endTime, Integer capacity){
         this.organizer = organizer;
         this.title = title;
         this.sport = sport;

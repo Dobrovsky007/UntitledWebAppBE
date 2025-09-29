@@ -9,6 +9,6 @@ import com.webapp.Eventified.domain.Event;
 
 public interface EventRepository extends JpaRepository<Event, UUID> { 
     Optional<Event> findByTitle(String title);
-    Optional<Event> findByCreatorId(UUID userId);
+    Optional<Event> findByOrganizer_Id(UUID userId);
     Optional<Event> findByTitleAndOrganizer_Id(String title, UUID organizerId);
 }
