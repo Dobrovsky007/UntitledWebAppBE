@@ -40,4 +40,16 @@ public class EventService {
             List<EventPoolDTO> eventsDTO = events.stream().map(EventPoolDTO::new).toList();
             return eventsDTO;
         }
+    
+        public List<EventPoolDTO> getMyEventsUpcoming(String username){
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            
+            List <Event> events = eventRepository.findByOrganizer(user);
+            List<EventPoolDTO> upcomingEventsDTO = events.stream()
+                .filter(event -> LocalDateTime.now().isBefore(event.getStartTime()))
+                .map(EventPoolDTO::new)
+                .toList();
+            return upcomingEventsDTO;
+        }
     }

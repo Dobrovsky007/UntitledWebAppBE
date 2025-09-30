@@ -59,4 +59,14 @@ public class UserController {
             return ResponseEntity.badRequest().body("User has already joined the event.");
         }
     }
+
+    @DeleteMapping("/profile/delete")
+    public ResponseEntity<?> deleteUser(Authentication authentication){
+        String username = authentication.getName();
+        if (userService.deleteUser(username)) {
+            return ResponseEntity.ok("User deleted successfully.");
+        } else {
+            return ResponseEntity.status(500).body("Failed to delete user.");
+        }
+    }
 }

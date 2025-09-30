@@ -57,4 +57,14 @@ public class EventController {
             return ResponseEntity.ok(eventService.getAllEvents());
         }
     }
+
+    @GetMapping("/my/upcoming")
+    public ResponseEntity<?> getAllMyUpcomingEvents(Authentication authentication){
+        String username = authentication.getName();
+        if (eventService.getMyEventsUpcoming(username).isEmpty()){
+            return ResponseEntity.status(500).body("No upcoming events found");
+        } else {
+            return ResponseEntity.ok(eventService.getMyEventsUpcoming(username));
+        }
+    }
 }

@@ -99,6 +99,7 @@ public class UserService {
 
     public boolean joinEvent(String username, UUID eventId){
 
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -109,5 +110,14 @@ public class UserService {
         EventParticipant participant = new EventParticipant(user.getId(), eventId);
         eventParticipantRepository.save(participant);
         return true;
+    }
+
+    public boolean deleteUser(String username){
+        
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        userRepository.delete(user);
+        return true;  
     }
 }
