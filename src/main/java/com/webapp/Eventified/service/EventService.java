@@ -52,4 +52,51 @@ public class EventService {
                 .toList();
             return upcomingEventsDTO;
         }
+    
+        public List<EventPoolDTO> getMyEventsPast(String username){
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+            List<Event> events = eventRepository.findByOrganizer(user);
+
+            List<EventPoolDTO> pastEventsDTO = events.stream()
+            .filter(event -> LocalDateTime.now().isAfter(event.getEndTime()))
+            .map(EventPoolDTO:: new)
+            .toList();
+            
+            return pastEventsDTO;
+        }
+    
+        public List<EventPoolDTO> getEventsBySport(Integer sport){
+            List<Event> events = eventRepository.findBySport(sport);
+            
+            List<EventPoolDTO> eventsBySport = events.stream()
+            .filter(event -> event.getSport() == sport)
+            .map(EventPoolDTO::new)
+            .toList();
+
+            return eventsBySport;
+        }
+    
+        public List<EventPoolDTO> getEventsBySkillLevel(Integer skillLevel){
+            List<Event> events = eventRepository.findBySkillLevel(skillLevel);
+
+            List<EventPoolDTO> eventsBySkillLevel = events.stream()
+            .filter(event -> event.getSkillLevel() == skillLevel)
+            .map(EventPoolDTO:: new)
+            .toList();
+
+            return eventsBySkillLevel;
+        }
+        
+        public List<EventPoolDTO> getEventsByStartTimeAfter(LocalDateTime dateTime){
+            List<Event> events = eventRepository.findByStartTimeAfter(dateTime);
+
+            List<EventPoolDTO> eventsByStartTimeAfter = events.stream()
+            .filter(event -> event.getStartTime().isAfter(dateTime))
+            .map(EventPoolDTO::new)
+            .toList();
+
+            return eventsByStartTimeAfter;
+        }
     }

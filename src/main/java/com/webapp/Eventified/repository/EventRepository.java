@@ -15,4 +15,8 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     Optional<Event> findByOrganizer_Id(UUID userId);
     Optional<Event> findByTitleAndOrganizer(String title, User organizer);
     List<Event> findByOrganizer(User user);
+    List<Event> findBySport(Integer sport);
+    List<Event> findBySkillLevel(Integer skillLevel);
+    List<Event> findByStartTimeAfter(LocalDateTime dateTime);
+    List<Event> findByEndTimeBefore(LocalDateTime dateTime);
 }

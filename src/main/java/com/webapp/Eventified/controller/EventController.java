@@ -2,9 +2,13 @@ package com.webapp.Eventified.controller;
 
 
 import org.springframework.security.core.Authentication;
+
+import java.time.LocalDateTime;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,6 +69,48 @@ public class EventController {
             return ResponseEntity.status(500).body("No upcoming events found");
         } else {
             return ResponseEntity.ok(eventService.getMyEventsUpcoming(username));
+        }
+    }
+
+    @GetMapping("my/past")
+    public ResponseEntity<?> getAllMyPastEvents(Authentication authentication){
+        String username = authentication.getName();
+
+        if (eventService.getMyEventsPast(username).isEmpty()){
+            return ResponseEntity.status(500).body("No past events found");
+        } else {
+            return ResponseEntity.ok(eventService.getMyEventsPast(username));
+        }
+
+    }
+
+    @GetMapping("/filter/by/sport/{sport}")
+    public ResponseEntity<?> getEventsBySport(@PathVariable Integer sport){
+        if (eventService.getEventsBySport(sport).isEmpty()) {
+            return ResponseEntity.status(500).body("No events for this sport found");
+        } else {
+            return ResponseEntity.ok(eventService.getEventsBySport(sport));
+        }
+    }
+
+    @GetMapping("/filter/by/skillLevel/{skillLevel}")
+    public ResponseEntity<?> getEventsBySkillLevel(@PathVariable Integer skillLevel){
+        if(eventService.getEventsBySkillLevel(skillLevel).isEmpty()){
+            return ResponseEntity.status(500).body("No events for this skill level found");
+        } else{
+            return ResponseEntity.ok(eventService.getEventsBySkillLevel(skillLevel));
+        }
+    }
+
+    @GetMapping("filter/by/startTimeAfter/{dateTime}")
+    public ResponseEntity<?> getEventsByStartTimeAfter(@PathVariable String dateTime){
+        
+        LocalDateTime parseDateTime = LocalDateTime.parse(dateTime);
+
+        if (eventService.getEventsByStartTimeAfter(parseDateTime).isEmpty()) {
+            return ResponseEntity.status(500).body("No events found after this date");
+        } else{
+            return ResponseEntity.ok(getEventsByStartTimeAfter(dateTime));
         }
     }
 }

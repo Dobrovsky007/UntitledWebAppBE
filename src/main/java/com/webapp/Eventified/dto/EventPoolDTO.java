@@ -1,6 +1,5 @@
 package com.webapp.Eventified.dto;
 
-import java.util.List;
 
 import com.webapp.Eventified.domain.Event;
 
