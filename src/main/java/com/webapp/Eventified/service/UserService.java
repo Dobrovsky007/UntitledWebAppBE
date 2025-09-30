@@ -7,10 +7,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.webapp.Eventified.domain.EventParticipant;
 import com.webapp.Eventified.domain.SportUser;
 import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.SportDTO;
 import com.webapp.Eventified.dto.UserProfileDTO;
+import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final EventParticipantRepository eventParticipantRepository;
 
     /**
      * Retrieves user profile information for a specific user by their ID.
@@ -94,4 +97,17 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public boolean joinEvent(String username, UUID eventId){
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if(eventParticipantRepository.findByUserIdAndEventId(user.getId(), eventId).isPresent()){
+            return false; 
+        }     
+
+        EventParticipant participant = new EventParticipant(user.getId(), eventId);
+        eventParticipantRepository.save(participant);
+        return true;
+    }
 }

@@ -44,10 +44,10 @@ public class EventParticipant {
 
     public EventParticipant(){}
 
-    public EventParticipant(UUID userId, UUID eventId, Integer roleOfParticipant){
+    public EventParticipant(UUID userId, UUID eventId){
         this.userId = userId;
         this.eventId = eventId;
-        this.roleOfParticipant = roleOfParticipant;
+        this.roleOfParticipant = 1;
         this.joinedAt = LocalDateTime.now();
     }
 }

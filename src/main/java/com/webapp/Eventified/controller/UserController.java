@@ -50,4 +50,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getOtherUserInfo(userId));
     }
     
+    @PostMapping("/event/join")
+    public ResponseEntity<?> joinEvent(@RequestParam UUID eventId, Authentication authentication){
+        String username = authentication.getName();
+        if (userService.joinEvent(username, eventId)) {
+            return ResponseEntity.ok("Successfully joined the event.");
+        } else {
+            return ResponseEntity.badRequest().body("User has already joined the event.");
+        }
+    }
 }
