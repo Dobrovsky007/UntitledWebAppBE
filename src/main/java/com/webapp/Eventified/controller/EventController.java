@@ -124,4 +124,13 @@ public class EventController {
             return ResponseEntity.ok(eventService.getEventsByEndTimeBefore(parseDateTime));
         }
     }
+
+    @GetMapping("filter/by/freeSlots/{freeSlots}")
+    public ResponseEntity<?> getEventsByFreeSlots(@PathVariable Integer freeSlots){
+        if(eventService.getEventsByFreeSlots(freeSlots).isEmpty()){
+            return ResponseEntity.status(500).body("No events found with that number of free slots");
+        } else{
+            return ResponseEntity.ok(eventService.getEventsByFreeSlots(freeSlots));
+        }
+    }
 }

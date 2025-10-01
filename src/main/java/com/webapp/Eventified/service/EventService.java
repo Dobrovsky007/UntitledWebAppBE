@@ -114,4 +114,14 @@ public class EventService {
             return eventsByEndTimeBefore;
         }
         
+        public List<EventPoolDTO> getEventsByFreeSlots(Integer freeSlots){
+            List<Event> events = eventRepository.findAll();
+
+            List<EventPoolDTO> eventsByFreeSlots = events.stream()
+            .filter(event -> event.getCapacity() - event.getOccupied() >= freeSlots)
+            .map(EventPoolDTO::new)
+            .toList();
+
+            return eventsByFreeSlots;
+        }
     }

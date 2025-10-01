@@ -33,6 +33,9 @@ public class Event {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "occupied" , nullable = false)
+    private Integer occupied;
+
     @Column(name = "sport", nullable = false)
     private Integer sport;
 
