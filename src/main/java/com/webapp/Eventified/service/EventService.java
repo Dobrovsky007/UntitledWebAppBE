@@ -7,8 +7,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.webapp.Eventified.domain.Event;
+import com.webapp.Eventified.domain.EventParticipant;
 import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.EventPoolDTO;
+import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;
 
@@ -20,6 +22,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final EventParticipantRepository eventParticipantRepository;
 
         public Event createEvent(String username, String title, Integer sport, String address, Integer skillLevel, LocalDateTime startTime, LocalDateTime endTime, Integer capacity, BigDecimal latitude, BigDecimal longitude) {
     
@@ -99,4 +102,16 @@ public class EventService {
 
             return eventsByStartTimeAfter;
         }
+    
+        public List<EventPoolDTO> getEventsByEndTimeBefore(LocalDateTime dateTime){
+            List<Event> events = eventRepository.findByEndTimeBefore(dateTime);
+
+            List<EventPoolDTO> eventsByEndTimeBefore = events.stream()
+            .filter(event -> event.getEndTime().isBefore(dateTime))
+            .map(EventPoolDTO::new)
+            .toList();
+
+            return eventsByEndTimeBefore;
+        }
+        
     }

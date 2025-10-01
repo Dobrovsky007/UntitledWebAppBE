@@ -113,4 +113,15 @@ public class EventController {
             return ResponseEntity.ok(getEventsByStartTimeAfter(dateTime));
         }
     }
+
+    @GetMapping("filter/by/startTimeBefore/{dateTime}")
+    public ResponseEntity<?> getEventsByEndTimeBefore(@PathVariable String dateTime){
+        LocalDateTime parseDateTime = LocalDateTime.parse(dateTime);
+
+        if(eventService.getEventsByEndTimeBefore(parseDateTime).isEmpty()){
+            return ResponseEntity.status(500).body("No events found before this date");
+        } else{
+            return ResponseEntity.ok(eventService.getEventsByEndTimeBefore(parseDateTime));
+        }
+    }
 }
