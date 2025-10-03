@@ -124,4 +124,24 @@ public class EventService {
 
             return eventsByFreeSlots;
         }
+    
+        public List<EventPoolDTO> getFilteredEvents(
+            List<Integer> sports,
+            List<Integer> skillLevels,
+            LocalDateTime startTimeAfter,
+            LocalDateTime endTimeBefore,
+            Integer freeSlots){
+                List<Event> events = eventRepository.findAll();
+
+                List<EventPoolDTO> filteredEvents = events.stream()
+                .filter(event -> sports == null || sports.isEmpty() || sports.contains(event.getSport()))
+                .filter(event -> skillLevels == null ||skillLevels.isEmpty() || skillLevels.contains(event.getSkillLevel()))
+                .filter(event -> startTimeAfter == null || event.getStartTime().isAfter(startTimeAfter))
+                .filter(event -> endTimeBefore == null || event.getEndTime().isBefore(endTimeBefore))
+                .filter(event -> event.getCapacity() - event.getOccupied() >= freeSlots)
+                .map(EventPoolDTO::new)
+                .toList();
+
+                return filteredEvents;
+            }
     }
