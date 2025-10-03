@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 
 import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;
 import com.webapp.Eventified.service.EventService;
@@ -19,13 +20,15 @@ class EventServiceTest {
 
     private EventRepository eventRepository;
     private UserRepository userRepository;
+    private EventParticipantRepository eventParticipantRepository;
     private EventService eventService;
 
     @BeforeEach
     void setUp() {
         eventRepository = mock(EventRepository.class);
         userRepository = mock(UserRepository.class);
-        eventService = new EventService(eventRepository, userRepository);
+        eventParticipantRepository = mock(EventParticipantRepository.class);
+        eventService = new EventService(eventRepository, userRepository, eventParticipantRepository);
     }
 
     @Test
