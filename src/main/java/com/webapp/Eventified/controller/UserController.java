@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.webapp.Eventified.dto.SportDTO;
 import com.webapp.Eventified.service.UserService;
 
 @RestController
@@ -67,6 +68,19 @@ public class UserController {
             return ResponseEntity.ok("User deleted successfully.");
         } else {
             return ResponseEntity.status(500).body("Failed to delete user.");
+        }
+    }
+
+    @PostMapping("/sport/add")
+    public ResponseEntity<?> addPreferredSport(
+            @RequestBody SportDTO sportRequest, 
+            Authentication authentication){
+        
+        String username = authentication.getName();
+        try {
+            return ResponseEntity.ok(userService.addPreferredSport(username, sportRequest));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 }

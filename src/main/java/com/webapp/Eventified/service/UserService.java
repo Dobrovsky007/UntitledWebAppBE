@@ -13,6 +13,7 @@ import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.SportDTO;
 import com.webapp.Eventified.dto.UserProfileDTO;
 import com.webapp.Eventified.repository.EventParticipantRepository;
+import com.webapp.Eventified.repository.SportUserRepository;
 import com.webapp.Eventified.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final EventParticipantRepository eventParticipantRepository;
+    private final SportUserRepository sportUserRepository;
 
     /**
      * Retrieves user profile information for a specific user by their ID.
@@ -119,5 +121,13 @@ public class UserService {
 
         userRepository.delete(user);
         return true;  
+    }
+
+    public SportUser addPreferredSport(String username, SportDTO sportRequest){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        SportUser sportUser = new SportUser(user.getId(), sportRequest.getSport(), sportRequest.getSkillLevel());
+        return sportUserRepository.save(sportUser);
     }
 }

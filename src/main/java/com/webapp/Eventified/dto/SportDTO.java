@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SportDTO {
-    private String sport;
+    private Integer sport;
     private int skillLevel;
 }

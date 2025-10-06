@@ -20,7 +20,7 @@ public class SportUser {
     private UUID userId;
 
     @Column(name = "sport")
-    private String sport;
+    private Integer sport;
 
     @Column(nullable = false, name = "skill_level")
     private Integer skillLevel;
@@ -32,7 +32,7 @@ public class SportUser {
     public SportUser(){
     }
 
-    public SportUser(UUID id, String sport, Integer skillLevel){
+    public SportUser(UUID id, Integer sport, Integer skillLevel){
         this.userId = id;
         this.sport = sport;
         this.skillLevel = skillLevel;
