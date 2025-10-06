@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public class SportUserId implements Serializable {
     private UUID userId;
-    private String sport;
+    private Integer sport;
 }

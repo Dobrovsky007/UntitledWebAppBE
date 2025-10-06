@@ -24,6 +24,25 @@ public class EventService {
     private final UserRepository userRepository;
     private final EventParticipantRepository eventParticipantRepository;
 
+    /**
+     * Creates a new event in the system with the specified details.
+     * Validates that the organizer exists and doesn't already have an event with the same title.
+     * The event is saved to the database and an EventParticipant record is automatically created
+     * for the organizer with role 0 (organizer).
+     *
+     * @param username the username of the event organizer
+     * @param title the title of the event (must be unique per organizer)
+     * @param sport the integer identifier of the sport type
+     * @param address the physical address where the event will take place
+     * @param skillLevel the required skill level for participants
+     * @param startTime the date and time when the event starts
+     * @param endTime the date and time when the event ends
+     * @param capacity the maximum number of participants allowed
+     * @param latitude the latitude coordinate of the event location
+     * @param longitude the longitude coordinate of the event location
+     * @return Event the created and saved event entity
+     * @throws IllegalArgumentException if the user is not found or an event with the same title already exists
+     */
         public Event createEvent(String username, String title, Integer sport, String address, Integer skillLevel, LocalDateTime startTime, LocalDateTime endTime, Integer capacity, BigDecimal latitude, BigDecimal longitude) {
     
             User organizer = userRepository.findByUsername(username)
@@ -38,12 +57,26 @@ public class EventService {
             return eventRepository.save(event);
         }
 
+        /**
+         * Retrieves all events in the system and converts them to DTOs for API response.
+         * This method provides a complete list of events regardless of status or timing.
+         *
+         * @return List<EventPoolDTO> containing all events in the system as DTO objects
+         */
         public List <EventPoolDTO> getAllEvents() {
             List<Event> events = eventRepository.findAll();
             List<EventPoolDTO> eventsDTO = events.stream().map(EventPoolDTO::new).toList();
             return eventsDTO;
         }
     
+        /**
+         * Retrieves all upcoming events organized by a specific user.
+         * Filters events where the start time is after the current timestamp.
+         *
+         * @param username the username of the event organizer
+         * @return List<EventPoolDTO> containing upcoming events organized by the user
+         * @throws IllegalArgumentException if the user with the specified username is not found
+         */
         public List<EventPoolDTO> getMyEventsUpcoming(String username){
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -56,6 +89,14 @@ public class EventService {
             return upcomingEventsDTO;
         }
     
+        /**
+         * Retrieves all past events organized by a specific user.
+         * Filters events where the end time is before the current timestamp.
+         *
+         * @param username the username of the event organizer
+         * @return List<EventPoolDTO> containing past events organized by the user
+         * @throws IllegalArgumentException if the user with the specified username is not found
+         */
         public List<EventPoolDTO> getMyEventsPast(String username){
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -70,6 +111,13 @@ public class EventService {
             return pastEventsDTO;
         }
     
+        /**
+         * Retrieves all events filtered by a specific sport type.
+         * Returns events that match the specified sport identifier.
+         *
+         * @param sport the integer identifier of the sport to filter by
+         * @return List<EventPoolDTO> containing events for the specified sport
+         */
         public List<EventPoolDTO> getEventsBySport(Integer sport){
             List<Event> events = eventRepository.findBySport(sport);
             
@@ -81,6 +129,13 @@ public class EventService {
             return eventsBySport;
         }
     
+        /**
+         * Retrieves all events filtered by a specific skill level requirement.
+         * Returns events that match the specified skill level.
+         *
+         * @param skillLevel the integer identifier of the skill level to filter by
+         * @return List<EventPoolDTO> containing events for the specified skill level
+         */
         public List<EventPoolDTO> getEventsBySkillLevel(Integer skillLevel){
             List<Event> events = eventRepository.findBySkillLevel(skillLevel);
 
@@ -92,6 +147,13 @@ public class EventService {
             return eventsBySkillLevel;
         }
         
+        /**
+         * Retrieves all events that start after a specified date and time.
+         * Useful for finding events happening from a certain point in the future.
+         *
+         * @param dateTime the LocalDateTime after which events should start
+         * @return List<EventPoolDTO> containing events starting after the specified time
+         */
         public List<EventPoolDTO> getEventsByStartTimeAfter(LocalDateTime dateTime){
             List<Event> events = eventRepository.findByStartTimeAfter(dateTime);
 
@@ -103,6 +165,13 @@ public class EventService {
             return eventsByStartTimeAfter;
         }
     
+        /**
+         * Retrieves all events that end before a specified date and time.
+         * Useful for finding events that have concluded by a certain point.
+         *
+         * @param dateTime the LocalDateTime before which events should end
+         * @return List<EventPoolDTO> containing events ending before the specified time
+         */
         public List<EventPoolDTO> getEventsByEndTimeBefore(LocalDateTime dateTime){
             List<Event> events = eventRepository.findByEndTimeBefore(dateTime);
 
@@ -114,6 +183,13 @@ public class EventService {
             return eventsByEndTimeBefore;
         }
         
+        /**
+         * Retrieves all events that have at least the specified number of free spots available.
+         * Calculates free slots by subtracting occupied count from total capacity.
+         *
+         * @param freeSlots the minimum number of free spots required
+         * @return List<EventPoolDTO> containing events with sufficient available capacity
+         */
         public List<EventPoolDTO> getEventsByFreeSlots(Integer freeSlots){
             List<Event> events = eventRepository.findAll();
 
@@ -125,6 +201,18 @@ public class EventService {
             return eventsByFreeSlots;
         }
     
+        /**
+         * Retrieves events filtered by multiple criteria including sport, skill level, timing, and capacity.
+         * All filter parameters are optional - null or empty values are ignored in filtering.
+         * Calculates free slots dynamically by comparing capacity with occupied count.
+         *
+         * @param sports list of sport IDs to filter by (optional)
+         * @param skillLevels list of skill levels to filter by (optional)
+         * @param startTimeAfter minimum start time for events (optional)
+         * @param endTimeBefore maximum end time for events (optional)
+         * @param freeSlots minimum number of free spots required (optional)
+         * @return List<EventPoolDTO> containing events matching all specified criteria
+         */
         public List<EventPoolDTO> getFilteredEvents(
             List<Integer> sports,
             List<Integer> skillLevels,

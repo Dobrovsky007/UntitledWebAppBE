@@ -26,10 +26,23 @@ public class EventController {
 
     private final EventService eventService;
 
+    /**
+     * Constructs a new EventController with the specified EventService.
+     *
+     * @param eventService the service layer for event-related operations
+     */
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
 
+    /**
+     * Creates a new event with the authenticated user as the organizer.
+     * Validates the event details and ensures the user doesn't already have an event with the same title.
+     *
+     * @param request the event creation request containing all event details
+     * @param authentication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity with success message if event is created, or error message if validation fails
+     */
     @PostMapping("/create")
     public ResponseEntity<?> createEvent(@RequestBody EventRequest request, Authentication authentication) {
 
@@ -55,6 +68,12 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves all events in the system for public viewing.
+     * Returns all events regardless of organizer, status, or timing.
+     *
+     * @return ResponseEntity containing all events as DTOs, or 404 if no events exist
+     */
     @GetMapping("/all")
     public ResponseEntity<?> getAllEvents(){
         if (eventService.getAllEvents().isEmpty()) {
@@ -64,6 +83,13 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves all upcoming events organized by the authenticated user.
+     * Filters events where the start time is after the current timestamp.
+     *
+     * @param authentication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity containing upcoming events or error message if none found
+     */
     @GetMapping("/my/upcoming")
     public ResponseEntity<?> getAllMyUpcomingEvents(Authentication authentication){
         String username = authentication.getName();
@@ -74,6 +100,13 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves all past events organized by the authenticated user.
+     * Filters events where the end time is before the current timestamp.
+     *
+     * @param authentication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity containing past events or error message if none found
+     */
     @GetMapping("my/past")
     public ResponseEntity<?> getAllMyPastEvents(Authentication authentication){
         String username = authentication.getName();
@@ -86,6 +119,13 @@ public class EventController {
 
     }
 
+    /**
+     * Retrieves all events filtered by a specific sport type.
+     * Returns events that match the specified sport identifier.
+     *
+     * @param sport the integer identifier of the sport to filter by
+     * @return ResponseEntity containing events for the specified sport or error if none found
+     */
     @GetMapping("/filter/by/sport/{sport}")
     public ResponseEntity<?> getEventsBySport(@PathVariable Integer sport){
         if (eventService.getEventsBySport(sport).isEmpty()) {
@@ -95,6 +135,13 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves all events filtered by a specific skill level requirement.
+     * Returns events that match the specified skill level.
+     *
+     * @param skillLevel the integer identifier of the skill level to filter by
+     * @return ResponseEntity containing events for the specified skill level or error if none found
+     */
     @GetMapping("/filter/by/skillLevel/{skillLevel}")
     public ResponseEntity<?> getEventsBySkillLevel(@PathVariable Integer skillLevel){
         if(eventService.getEventsBySkillLevel(skillLevel).isEmpty()){
@@ -104,6 +151,13 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves all events that start after a specified date and time.
+     * Parses the datetime string parameter and filters events accordingly.
+     *
+     * @param dateTime the ISO datetime string after which events should start
+     * @return ResponseEntity containing events starting after the specified time or error if none found
+     */
     @GetMapping("/filter/by/startTimeAfter/{dateTime}")
     public ResponseEntity<?> getEventsByStartTimeAfter(@PathVariable String dateTime){
         
@@ -116,6 +170,13 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves all events that end before a specified date and time.
+     * Parses the datetime string parameter and filters events accordingly.
+     *
+     * @param dateTime the ISO datetime string before which events should end
+     * @return ResponseEntity containing events ending before the specified time or error if none found
+     */
     @GetMapping("/filter/by/startTimeBefore/{dateTime}")
     public ResponseEntity<?> getEventsByEndTimeBefore(@PathVariable String dateTime){
         LocalDateTime parseDateTime = LocalDateTime.parse(dateTime);
@@ -127,6 +188,13 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves all events that have at least the specified number of free spots available.
+     * Calculates available capacity by comparing total capacity with occupied slots.
+     *
+     * @param freeSlots the minimum number of free spots required
+     * @return ResponseEntity containing events with sufficient available capacity or error if none found
+     */
     @GetMapping("/filter/by/freeSlots/{freeSlots}")
     public ResponseEntity<?> getEventsByFreeSlots(@PathVariable Integer freeSlots){
         if(eventService.getEventsByFreeSlots(freeSlots).isEmpty()){
@@ -136,6 +204,17 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves events filtered by multiple optional criteria including sport, skill level, timing, and capacity.
+     * All parameters are optional and will be ignored if not provided. Combines multiple filters for precise event discovery.
+     *
+     * @param sports optional list of sport IDs to filter by
+     * @param skillLevels optional list of skill levels to filter by
+     * @param startTimeAfter optional ISO datetime string for minimum start time
+     * @param endTimeBefore optional ISO datetime string for maximum end time
+     * @param freeSlots optional minimum number of free spots required
+     * @return ResponseEntity containing filtered events or error message if none match criteria
+     */
     @GetMapping("/filter")
     public ResponseEntity<?> getFilteredEvents(
             @RequestParam (required = false) List<Integer> sports,

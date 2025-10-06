@@ -99,6 +99,16 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Allows a user to join an event by creating an EventParticipant record.
+     * Validates that the user exists and hasn't already joined the event.
+     * Sets the participant role to 1 (regular participant) and records the join timestamp.
+     *
+     * @param username the username of the user who wants to join the event
+     * @param eventId the unique identifier of the event to join
+     * @return boolean true if the user successfully joined the event, false if already joined
+     * @throws IllegalArgumentException if the user with the specified username is not found
+     */
     public boolean joinEvent(String username, UUID eventId){
 
 
@@ -114,6 +124,15 @@ public class UserService {
         return true;
     }
 
+    /**
+     * Permanently deletes a user account and all associated data from the system.
+     * This operation cascades to remove all related records including sports preferences
+     * and event participations due to database foreign key constraints.
+     *
+     * @param username the username of the user account to be deleted
+     * @return boolean true if the user was successfully deleted
+     * @throws IllegalArgumentException if the user with the specified username is not found
+     */
     public boolean deleteUser(String username){
         
         User user = userRepository.findByUsername(username)
@@ -123,11 +142,38 @@ public class UserService {
         return true;  
     }
 
+    /**
+     * Adds a new sport preference to a user's profile with the specified skill level.
+     * Creates a SportUser entity linking the user to their preferred sport and expertise level.
+     *
+     * @param username the username of the user adding the sport preference
+     * @param sportRequest the sport details including sport ID and skill level
+     * @return SportUser the created sport preference entity
+     * @throws IllegalArgumentException if the user with the specified username is not found
+     */
     public SportUser addPreferredSport(String username, SportDTO sportRequest){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         SportUser sportUser = new SportUser(user.getId(), sportRequest.getSport(), sportRequest.getSkillLevel());
         return sportUserRepository.save(sportUser);
+    }
+
+    /**
+     * Removes a sport preference from a user's profile.
+     * Deletes the SportUser entity that links the user to the specified sport.
+     *
+     * @param username the username of the user removing the sport preference
+     * @param sportRequest the sport details to be removed from user's preferences
+     * @throws IllegalArgumentException if the user is not found or the sport preference doesn't exist
+     */
+    public void removePreferredSport(String username, SportDTO sportRequest){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        SportUser sportUser = sportUserRepository.findByUserIdAndSport(user.getId(), sportRequest.getSport())
+                .orElseThrow(() -> new IllegalArgumentException("Sport not found for user"));
+
+        sportUserRepository.delete(sportUser);
     }
 }
