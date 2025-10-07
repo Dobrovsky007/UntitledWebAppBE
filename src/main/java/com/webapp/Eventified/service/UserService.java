@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.webapp.Eventified.domain.EventParticipant;
