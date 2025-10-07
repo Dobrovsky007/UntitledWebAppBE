@@ -16,6 +16,13 @@ import com.webapp.Eventified.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service class for managing event-related operations in the Eventified application.
+ * Provides functionality for creating, retrieving, and managing events and event participants.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -61,7 +68,7 @@ public class EventService {
          * Retrieves all events in the system and converts them to DTOs for API response.
          * This method provides a complete list of events regardless of status or timing.
          *
-         * @return List<EventPoolDTO> containing all events in the system as DTO objects
+         * @return List containing all events in the system as DTO objects
          */
         public List <EventPoolDTO> getAllEvents() {
             List<Event> events = eventRepository.findAll();
@@ -74,7 +81,7 @@ public class EventService {
          * Filters events where the start time is after the current timestamp.
          *
          * @param username the username of the event organizer
-         * @return List<EventPoolDTO> containing upcoming events organized by the user
+         * @return List containing upcoming events organized by the user
          * @throws IllegalArgumentException if the user with the specified username is not found
          */
         public List<EventPoolDTO> getMyEventsUpcoming(String username){
@@ -94,7 +101,7 @@ public class EventService {
          * Filters events where the end time is before the current timestamp.
          *
          * @param username the username of the event organizer
-         * @return List<EventPoolDTO> containing past events organized by the user
+         * @return List containing past events organized by the user
          * @throws IllegalArgumentException if the user with the specified username is not found
          */
         public List<EventPoolDTO> getMyEventsPast(String username){
@@ -116,7 +123,7 @@ public class EventService {
          * Returns events that match the specified sport identifier.
          *
          * @param sport the integer identifier of the sport to filter by
-         * @return List<EventPoolDTO> containing events for the specified sport
+         * @return List containing events for the specified sport
          */
         public List<EventPoolDTO> getEventsBySport(Integer sport){
             List<Event> events = eventRepository.findBySport(sport);
@@ -134,7 +141,7 @@ public class EventService {
          * Returns events that match the specified skill level.
          *
          * @param skillLevel the integer identifier of the skill level to filter by
-         * @return List<EventPoolDTO> containing events for the specified skill level
+         * @return List containing events for the specified skill level
          */
         public List<EventPoolDTO> getEventsBySkillLevel(Integer skillLevel){
             List<Event> events = eventRepository.findBySkillLevel(skillLevel);
@@ -152,7 +159,7 @@ public class EventService {
          * Useful for finding events happening from a certain point in the future.
          *
          * @param dateTime the LocalDateTime after which events should start
-         * @return List<EventPoolDTO> containing events starting after the specified time
+         * @return List containing events starting after the specified time
          */
         public List<EventPoolDTO> getEventsByStartTimeAfter(LocalDateTime dateTime){
             List<Event> events = eventRepository.findByStartTimeAfter(dateTime);
@@ -170,7 +177,7 @@ public class EventService {
          * Useful for finding events that have concluded by a certain point.
          *
          * @param dateTime the LocalDateTime before which events should end
-         * @return List<EventPoolDTO> containing events ending before the specified time
+         * @return List containing events ending before the specified time
          */
         public List<EventPoolDTO> getEventsByEndTimeBefore(LocalDateTime dateTime){
             List<Event> events = eventRepository.findByEndTimeBefore(dateTime);
@@ -188,7 +195,7 @@ public class EventService {
          * Calculates free slots by subtracting occupied count from total capacity.
          *
          * @param freeSlots the minimum number of free spots required
-         * @return List<EventPoolDTO> containing events with sufficient available capacity
+         * @return List containing events with sufficient available capacity
          */
         public List<EventPoolDTO> getEventsByFreeSlots(Integer freeSlots){
             List<Event> events = eventRepository.findAll();
@@ -211,7 +218,7 @@ public class EventService {
          * @param startTimeAfter minimum start time for events (optional)
          * @param endTimeBefore maximum end time for events (optional)
          * @param freeSlots minimum number of free spots required (optional)
-         * @return List<EventPoolDTO> containing events matching all specified criteria
+         * @return List containing events matching all specified criteria
          */
         public List<EventPoolDTO> getFilteredEvents(
             List<Integer> sports,

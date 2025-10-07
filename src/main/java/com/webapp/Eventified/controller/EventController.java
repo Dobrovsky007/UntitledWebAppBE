@@ -20,6 +20,13 @@ import com.webapp.Eventified.service.EventService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
+/**
+ * REST controller for event-related endpoints.
+ * Provides API endpoints for event management operations.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/event")
 public class EventController {

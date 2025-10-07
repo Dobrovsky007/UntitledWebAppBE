@@ -9,6 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for handling authentication-related operations.
+ * Manages user registration, login, and JWT token generation.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {

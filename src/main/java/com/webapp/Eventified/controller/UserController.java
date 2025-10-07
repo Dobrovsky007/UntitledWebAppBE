@@ -39,11 +39,9 @@ public class UserController {
 
     /**
      * Retrieves the profile information of a specific user by their unique identifier.
-     * This endpoint allows viewing other users' profiles. The authentication parameter
-     * can be used for authorization checks if needed in the future.
+     * This endpoint allows viewing other users' profiles.
      *
      * @param userId the unique identifier of the user whose profile is requested
-     * @param authentication the Spring Security authentication object (for potential authorization)
      * @return ResponseEntity containing the requested user's profile information
      */
     @GetMapping("/info/{userId}")
