@@ -7,6 +7,7 @@ import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.domain.SportUser;
 import com.webapp.Eventified.domain.EventParticipant;
 import com.webapp.Eventified.dto.UserProfileDTO;
+import com.webapp.Eventified.repository.SportUserRepository;
 import com.webapp.Eventified.repository.UserRepository;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.service.UserService;
@@ -22,12 +23,13 @@ class UserServiceTest {
     private UserRepository userRepository;
     private EventParticipantRepository eventParticipantRepository;
     private UserService userService;
+    private SportUserRepository sportUserRepository;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         eventParticipantRepository = mock(EventParticipantRepository.class);
-        userService = new UserService(userRepository, eventParticipantRepository);
+        userService = new UserService(userRepository, eventParticipantRepository, sportUserRepository);
     }
 
     @Test
