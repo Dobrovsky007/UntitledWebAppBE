@@ -16,10 +16,10 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class JWTutil {
 
-    @Value("${JWT_SECRET}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${JWT_EXPIRATION:3600000}")
+    @Value("${jwt.expiration:3600000}")
     private long jwtExpiration;
 
     @PostConstruct
