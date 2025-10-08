@@ -3,8 +3,8 @@ package UnitTests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.webapp.Eventified.domain.User;
-import com.webapp.Eventified.dto.LoginRequest;
-import com.webapp.Eventified.dto.LoginResponse;
+import com.webapp.Eventified.dto.user.LoginRequest;
+import com.webapp.Eventified.dto.user.LoginResponse;
 import com.webapp.Eventified.repository.AuthRepository;
 import com.webapp.Eventified.service.AuthService;
 import com.webapp.Eventified.util.JWTutil;

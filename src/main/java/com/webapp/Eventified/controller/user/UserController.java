@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import com.webapp.Eventified.dto.SportDTO;
+import com.webapp.Eventified.dto.user.SportDTO;
 import com.webapp.Eventified.service.UserService;
 
 @RestController

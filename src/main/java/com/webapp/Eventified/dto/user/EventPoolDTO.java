@@ -1,4 +1,4 @@
-package com.webapp.Eventified.dto;
+package com.webapp.Eventified.dto.user;
 
 
 import com.webapp.Eventified.domain.Event;

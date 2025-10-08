@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.dto.user.UserProfileDTO;
 import com.webapp.Eventified.domain.SportUser;
 import com.webapp.Eventified.domain.EventParticipant;
-import com.webapp.Eventified.dto.UserProfileDTO;
 import com.webapp.Eventified.repository.SportUserRepository;
 import com.webapp.Eventified.repository.UserRepository;
 import com.webapp.Eventified.repository.EventParticipantRepository;

@@ -21,7 +21,10 @@ public class AdminUserController {
 
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(){
-        return null;
+        if (userService.getAllUserInfoAdmin().isEmpty()) {
+            return ResponseEntity.status(500).body("No users found");
+        } else {
+            return ResponseEntity.ok(userService.getAllUserInfoAdmin());
+        }
     }
-    
 }

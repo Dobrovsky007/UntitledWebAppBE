@@ -2,6 +2,7 @@ package com.webapp.Eventified.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,8 +25,8 @@ public class JWTutil {
 
     @PostConstruct
     public void validateConfig() {
-        if (jwtSecret == null || jwtSecret.length() < 32) {
-            throw new IllegalStateException("JWT_SECRET environment variable must be at least 32 characters");
+        if (jwtSecret == null || jwtSecret.length() < 64) {
+            throw new IllegalStateException("JWT_SECRET must be at least 64 characters for HS512 algorithm");
         }
     }
 
@@ -38,7 +39,7 @@ public class JWTutil {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSigningKey())
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 

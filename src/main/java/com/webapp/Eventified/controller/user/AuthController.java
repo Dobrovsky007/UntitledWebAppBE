@@ -1,7 +1,7 @@
 package com.webapp.Eventified.controller.user;
 
-import com.webapp.Eventified.dto.LoginRequest;
-import com.webapp.Eventified.dto.RegisterRequest;
+import com.webapp.Eventified.dto.user.LoginRequest;
+import com.webapp.Eventified.dto.user.RegisterRequest;
 import com.webapp.Eventified.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
