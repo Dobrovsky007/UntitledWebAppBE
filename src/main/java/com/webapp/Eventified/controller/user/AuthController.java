@@ -1,4 +1,4 @@
-package com.webapp.Eventified.controller;
+package com.webapp.Eventified.controller.user;
 
 import com.webapp.Eventified.dto.LoginRequest;
 import com.webapp.Eventified.dto.RegisterRequest;

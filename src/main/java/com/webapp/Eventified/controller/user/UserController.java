@@ -1,4 +1,4 @@
-package com.webapp.Eventified.controller;
+package com.webapp.Eventified.controller.user;
 
 import java.util.UUID;
 
