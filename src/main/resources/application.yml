@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: dev
+
+# Default logging configuration
+logging:
+  level:
+    com.webapp.Eventified: DEBUG
+    org.springframework.security: DEBUG
+
+# Default security configuration
+app:
+  security:
+    enabled: true  # This will be overridden by profiles

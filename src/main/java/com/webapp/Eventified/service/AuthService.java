@@ -6,7 +6,7 @@ import com.webapp.Eventified.dto.user.LoginResponse;
 import com.webapp.Eventified.repository.AuthRepository;
 import com.webapp.Eventified.util.JWTutil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final AuthRepository authRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final JWTutil jwtutil;
 
     /**

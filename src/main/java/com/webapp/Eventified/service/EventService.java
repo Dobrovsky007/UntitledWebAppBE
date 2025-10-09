@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.EventParticipant;
 import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.user.EventPoolDTO;
 import com.webapp.Eventified.repository.EventParticipantRepository;

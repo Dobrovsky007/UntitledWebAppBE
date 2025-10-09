@@ -15,6 +15,19 @@ spring:
 server:
   port: 8080
 
+# Development mode - Security disabled for easy backend development
+app:
+  security:
+    enabled: false
+
 jwt:
-  secret: ${JWT_SECRET}
+  secret: ${JWT_SECRET:dev-secret-key-for-development-only-do-not-use-in-production}
   expiration: ${JWT_EXPIRATION:3600000}
+
+# Swagger/OpenAPI configuration for development
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
