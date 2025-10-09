@@ -34,15 +34,27 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
 
+        String requestPath = request.getRequestURI();
+        if (requestPath.startsWith("/api/auth/")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            } catch (io.jsonwebtoken.ExpiredJwtException e) {
+                logger.warn("JWT Token has expired: " + e.getMessage());
+            } catch (io.jsonwebtoken.MalformedJwtException e) {
+                logger.warn("JWT Token is malformed: " + e.getMessage());
+            } catch (io.jsonwebtoken.security.SignatureException e) {
+                logger.warn("JWT Token signature validation failed: " + e.getMessage());
             } catch (Exception e) {
                 logger.warn("Unable to get JWT Token: " + e.getMessage());
             }
         } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+            logger.debug("JWT Token does not begin with Bearer String");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -54,6 +66,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                } else {
+                    logger.warn("JWT Token validation failed for user: " + username);
                 }
             } catch (Exception e) {
                 logger.error("Cannot set user authentication: " + e.getMessage());
