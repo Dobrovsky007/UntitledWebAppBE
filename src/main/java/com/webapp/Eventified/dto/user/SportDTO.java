@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class SportDTO {
     private Integer sport;
-    private int skillLevel;
+    private Integer skillLevel;
 }
