@@ -97,7 +97,7 @@ public class UserController {
         String username = authentication.getName();
 
         try {
-            return ResponseEntity.ok(userService.addPreferredSport(username, sportRequest));
+            return ResponseEntity.ok(userService.addPreferredSport(username, sportRequest.getSport(), sportRequest.getSkillLevel()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(500).body("Failed to add sport: " + e.getMessage());
         }

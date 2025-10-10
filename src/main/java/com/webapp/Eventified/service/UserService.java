@@ -169,11 +169,11 @@ public class UserService {
      * @throws IllegalArgumentException if the user with the specified username is
      *                                  not found
      */
-    public SportUser addPreferredSport(String username, SportDTO sportRequest) {
+    public SportUser addPreferredSport(String username, Integer sport, Integer skillLevel) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        SportUser sportUser = new SportUser(user.getId(), sportRequest.getSport(), sportRequest.getSkillLevel());
+        SportUser sportUser = new SportUser(user.getId(), sport, skillLevel);
         return sportUserRepository.save(sportUser);
     }
 
