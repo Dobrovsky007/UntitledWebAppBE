@@ -29,3 +29,17 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
+# CORS configuration for production
+cors:
+  allowed-origins: 
+    - "${FRONTEND_URL:http://localhost:3000}"
+    - "${FRONTEND_URL_SECONDARY:}"
+  allowed-methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
