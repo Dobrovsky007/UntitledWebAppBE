@@ -1,169 +1,136 @@
-# Eventified Backend - Security Configuration Guide
+# Eventified Backend - Security Guide
 
-This project supports **three different security modes** to accommodate different development and testing scenarios:
+Simple guide for running your Spring Boot backend with different security modes.
 
-## 🛠️ Available Profiles
+## Quick Start
 
-### 1. **Development Mode** (`dev` profile) - **Security DISABLED**
-**Use this for:** Backend development and testing without authentication hassles
+### Backend Development Mode
+```powershell
+# JWT authentication enabled with longer token expiry for easier development
+$env:SPRING_PROFILES_ACTIVE="dev"
+mvn spring-boot:run
+```
+- JWT authentication enabled (required for user identification)
+- Longer token expiration (24 hours) for easier development
+- Debug logging enabled
+- SQL query logging enabled
 
-```bash
-# Run with development profile
-set SPRING_PROFILES_ACTIVE=dev && mvn spring-boot:run
+### Frontend Testing Mode  
+```powershell
+# JWT authentication enabled for frontend team testing
+$env:SPRING_PROFILES_ACTIVE="frontend" 
+mvn spring-boot:run
+```
+- JWT authentication enabled
+- CORS configured for frontend development ports
+- 24-hour token expiration for easier testing
+- Optimized for frontend integration
 
-# Or on Linux/Mac
-export SPRING_PROFILES_ACTIVE=dev && mvn spring-boot:run
+### Production Mode
+```powershell
+# Full security configuration
+$env:SPRING_PROFILES_ACTIVE="prod"
+mvn spring-boot:run
+```
+- JWT authentication enabled
+- 1-hour token expiration
+- Production database settings
+- Minimal logging
 
-# Or use the batch script on Windows
-start.cmd
+## Testing with Postman
+
+### Step 1: Register User
+```
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com", 
+  "password": "password123"
+}
 ```
 
-**Features:**
-- ✅ All endpoints accessible without authentication
-- ✅ Swagger UI available at: `http://localhost:8080/swagger-ui.html`
-- ✅ Development status endpoint: `http://localhost:8080/api/dev/status`
-- ✅ Database SQL logging enabled
-- ✅ No JWT token required
+### Step 2: Login and Get Token
+```
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
 
-### 2. **Frontend Mode** (`frontend` profile) - **Security ENABLED**
-**Use this for:** Frontend team testing with JWT authentication
+{
+  "username": "testuser",
+  "password": "password123"
+}
+```
+**Response:** `{"token": "eyJhbGciOiJIUzUxMiJ9..."}`
 
-```bash
-# Run with frontend profile
-set SPRING_PROFILES_ACTIVE=frontend && mvn spring-boot:run
+### Step 3: Use Token in Requests
+```
+POST http://localhost:8080/api/user/sport/add
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "sport": 1,
+  "skillLevel": 2
+}
 ```
 
-**Features:**
-- 🔐 JWT authentication enabled
-- ✅ CORS configured for common frontend ports (3000, 3001, 4200, 5173)
-- ✅ Longer JWT expiration (24 hours) for easier testing
-- ✅ Swagger UI available with JWT authentication
-- ✅ Test JWT tokens via `/api/auth/login`
+## Profile Comparison
 
-### 3. **Production Mode** (`prod` profile) - **Security ENABLED**
-**Use this for:** Production deployment
+| Mode | JWT Required | Token Expiry | Best For |
+|------|--------------|--------------|----------|
+| dev | Yes | 24 hours | Backend development |
+| frontend | Yes | 24 hours | Frontend team testing |
+| prod | Yes | 1 hour | Production |
 
-```bash
-# Run with production profile
-set SPRING_PROFILES_ACTIVE=prod && mvn spring-boot:run
-```
+## Available Endpoints
 
-**Features:**
-- 🔐 Full JWT security
-- 🔒 Shorter JWT expiration (1 hour)
-- 🔒 Production database configuration
-- 🔒 SQL logging disabled
-
-## 🚀 Quick Start Guide
-
-### For Backend Developers (You)
-```bash
-# 1. Start in development mode (no authentication)
-set SPRING_PROFILES_ACTIVE=dev && mvn spring-boot:run
-
-# 2. Test your endpoints freely
-curl http://localhost:8080/api/dev/status
-curl http://localhost:8080/api/user/...
-curl http://localhost:8080/api/events/...
-
-# 3. Use Swagger UI for testing
-# Open: http://localhost:8080/swagger-ui.html
-```
-
-### For Frontend Developers (Your Colleagues)
-```bash
-# 1. Start in frontend mode (with JWT)
-set SPRING_PROFILES_ACTIVE=frontend && mvn spring-boot:run
-
-# 2. Register a test user
-curl -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"username": "testuser", "email": "test@example.com", "password": "password123"}'
-
-# 3. Login to get JWT token
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "testuser", "password": "password123"}'
-
-# 4. Use the JWT token in subsequent requests
-curl -X GET http://localhost:8080/api/user/profile \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
-```
-
-## 🔧 Environment Variables
-
-Create a `.env` file or set these environment variables:
-
-```env
-# Database Configuration
-DB_USER=your_db_username
-DB_PASS=your_db_password
-DB_HOST=localhost  # for prod
-DB_PORT=5432       # for prod
-
-# JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key-here-at-least-256-bits
-JWT_EXPIRATION=3600000  # 1 hour in milliseconds
-```
-
-## 📋 Security Endpoints Overview
-
-### Public Endpoints (Always accessible):
+### Public Endpoints (no token required):
 - `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login (returns JWT)
+- `POST /api/auth/login` - Get JWT token
 - `GET /swagger-ui.html` - API documentation
-- `GET /v3/api-docs` - OpenAPI specification
 
-### Protected Endpoints (JWT required in frontend/prod modes):
-- `GET /api/user/**` - User operations (USER or ADMIN role)
-- `GET /api/events/**` - Event operations (USER or ADMIN role)
-- `GET /api/admin/**` - Admin operations (ADMIN role only)
+### Protected Endpoints (JWT token required):
+- `POST /api/user/sport/add` - Add sport to user
+- `GET /api/user/profile` - Get user profile
+- `DELETE /api/user/sport/remove` - Remove user sport
+- All `/api/user/**` endpoints
+- All `/api/admin/**` endpoints (admin role required)
 
-### Development-only Endpoints (dev mode only):
-- `GET /api/dev/status` - Backend status
-- `GET /api/dev/endpoints` - Available endpoints info
+## Common Issues
 
-## 🔍 Testing JWT Authentication
+**401 Unauthorized Error:**
+- Check Authorization header format: `Authorization: Bearer eyJhbGciOiJIUzUxMiJ9...`
+- Ensure there's a space after "Bearer"
+- Token might be expired - login again
 
-### Using Swagger UI (Frontend/Prod modes):
-1. Go to `http://localhost:8080/swagger-ui.html`
-2. Click on "Authorize" button (🔒 icon)
-3. Enter your JWT token (without "Bearer " prefix)
-4. Test protected endpoints
+**500 Internal Server Error:**
+- Check backend console logs for detailed error message
+- Verify database connection
+- Check if required data exists (sports table)
 
-### Using curl:
-```bash
-# Get JWT token
-TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "testuser", "password": "password123"}' | jq -r '.token')
+**Token Expired:**
+- dev/frontend modes: 24 hour expiration
+- prod mode: 1 hour expiration
+- Login again to get fresh token
 
-# Use token in requests
-curl -X GET http://localhost:8080/api/user/profile \
-  -H "Authorization: Bearer $TOKEN"
-```
+**Wrong Profile Active:**
+- Check startup logs for: "The following 1 profile is active: [profile_name]"
+- If wrong profile, stop app and restart with correct environment variable
 
-## 🐛 Troubleshooting
+## Environment Setup
 
-### JWT Token Issues:
-- Ensure token is included in `Authorization: Bearer <token>` header
-- Check token expiration (1 hour in prod, 24 hours in frontend mode)
-- Verify user exists and is verified in database
+Your `.env` file is already configured with:
+- Database connection (PostgreSQL)
+- JWT secret key
+- Token expiration settings
 
-### CORS Issues:
-- Frontend mode includes common development ports
-- Add your frontend URL to `application-frontend.yml` if needed
+All modes require JWT authentication because your backend uses JWT tokens to identify users for database operations.
 
-### Database Issues:
-- Ensure PostgreSQL is running
-- Check database credentials in environment variables
-- Run Flyway migrations: `mvn flyway:migrate`
+## Testing Tips
 
-## 📝 Notes
-
-- **Development mode** is perfect for backend API development and testing
-- **Frontend mode** simulates production security while being frontend-friendly
-- **Production mode** should be used for actual deployment
-- JWT tokens contain user roles (USER/ADMIN) for authorization
-- All passwords are hashed with BCrypt
-- Sessions are stateless (JWT-based)
+- Use Swagger UI for quick testing: `http://localhost:8080/swagger-ui.html`
+- In Swagger, click "Authorize" and enter: `Bearer YOUR_TOKEN`
+- Always check startup logs to confirm active profile
+- Keep your JWT token handy for repeated testing
+- Use Postman collections to save and reuse requests
