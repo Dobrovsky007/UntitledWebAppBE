@@ -7,18 +7,26 @@ import java.util.UUID;
 import com.webapp.Eventified.domain.id.SportUserId;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"user"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "user_sports")
 @IdClass(SportUserId.class)
 public class SportUser {
 
+    @EqualsAndHashCode.Include
     @Id
     @Column(name = "user_id")
     private UUID userId;
 
+    @EqualsAndHashCode.Include
     @Column(name = "sport")
     private Integer sport;
 

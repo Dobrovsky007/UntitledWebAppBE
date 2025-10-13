@@ -1,18 +1,26 @@
 package com.webapp.Eventified.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+
+@Getter
+@Setter
+@ToString(exclude = {"sports", "organizedEvents", "eventParticipations"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
 public class User {
 
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue
     private UUID id;
