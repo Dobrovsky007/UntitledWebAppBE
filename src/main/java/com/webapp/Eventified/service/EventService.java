@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.user.EventPoolDTO;
-import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;
 
@@ -28,7 +27,6 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-    private final EventParticipantRepository eventParticipantRepository;
 
     /**
      * Creates a new event in the system with the specified details.
