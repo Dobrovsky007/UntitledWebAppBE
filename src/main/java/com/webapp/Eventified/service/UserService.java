@@ -105,7 +105,10 @@ public class UserService {
     private List<SportDTO> mapToSportDTOList(Set<SportUser> sports) {
         return sports.stream()
                 .map(sport -> {
-                    return new SportDTO();
+                    SportDTO dto = new SportDTO();
+                    dto.setSport(sport.getSport());
+                    dto.setSkillLevel(sport.getSkillLevel());
+                    return dto;
                 })
                 .collect(Collectors.toList());
     }

@@ -26,10 +26,12 @@ import lombok.ToString;
 @IdClass(EventParticipantId.class)
 public class EventParticipant {
     
+    @EqualsAndHashCode.Include
     @Id
     @Column(name = "user_id")
     private UUID userId;
 
+    @EqualsAndHashCode.Include
     @Id
     @Column(name = "event_id")
     private UUID eventId;
