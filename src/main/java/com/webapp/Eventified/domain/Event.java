@@ -28,7 +28,6 @@ import lombok.ToString;
 @Table(name = "events")
 public class Event {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue
     private UUID id;

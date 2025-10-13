@@ -21,12 +21,10 @@ import lombok.ToString;
 @IdClass(SportUserId.class)
 public class SportUser {
 
-    @EqualsAndHashCode.Include
     @Id
     @Column(name = "user_id")
     private UUID userId;
 
-    @EqualsAndHashCode.Include
     @Column(name = "sport")
     private Integer sport;
 

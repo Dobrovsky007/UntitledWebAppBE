@@ -20,7 +20,6 @@ import java.util.UUID;
 @Table(name = "users")
 public class User {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue
     private UUID id;

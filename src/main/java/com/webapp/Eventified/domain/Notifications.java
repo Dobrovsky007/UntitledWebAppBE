@@ -23,7 +23,6 @@ import lombok.ToString;
 @Table(name = "notifications")
 public class Notifications {
 
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue
     private UUID id;
