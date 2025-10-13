@@ -246,6 +246,7 @@ public class EventController {
         }
     }
 
+    @GetMapping("/attended/past")
     public ResponseEntity<?> getMyAttendedPastEvents(Authentication authentication){
 
         String username = authentication.getName();
@@ -254,6 +255,18 @@ public class EventController {
             return ResponseEntity.status(500).body("No past attended events found");
         } else{
             return ResponseEntity.ok(eventService.getMyAttendedPastEvents(username));
+        }
+    }
+
+    @GetMapping("/attended/upcoming")
+    public ResponseEntity<?> getMyAttendedUpcomingEvents(Authentication authentication){
+
+        String username = authentication.getName();
+
+        if (eventService.getMyAttendedUpcomingEvents(username).isEmpty()) {
+            return ResponseEntity.status(500).body("No upcoming attended events found");
+        } else{
+            return ResponseEntity.ok(eventService.getMyAttendedUpcomingEvents(username));
         }
     }
 }

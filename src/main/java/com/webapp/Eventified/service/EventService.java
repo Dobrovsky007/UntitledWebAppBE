@@ -267,4 +267,17 @@ public class EventService {
 
         return pastAttendedEvents;
     }
+
+    public List<EventPoolDTO> getMyAttendedUpcomingEvents(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        List<EventPoolDTO> upcomingAttendedEvents = eventParticipantRepository.findByUserIdAndRoleOfParticipant(user.getId(), 1)
+                .stream()
+                .filter(ep -> LocalDateTime.now().isBefore(ep.getEvent().getStartTime()))
+                .map(ep -> new EventPoolDTO(ep.getEvent()))
+                .toList();
+
+        return upcomingAttendedEvents;
+    }
 }
