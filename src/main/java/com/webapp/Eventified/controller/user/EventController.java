@@ -97,7 +97,7 @@ public class EventController {
      * @param authentication the Spring Security authentication object containing user credentials
      * @return ResponseEntity containing upcoming events or error message if none found
      */
-    @GetMapping("/my/upcoming")
+    @GetMapping("/hosted/upcoming")
     public ResponseEntity<?> getAllMyUpcomingEvents(Authentication authentication){
         String username = authentication.getName();
         if (eventService.getMyEventsUpcoming(username).isEmpty()){
@@ -114,7 +114,7 @@ public class EventController {
      * @param authentication the Spring Security authentication object containing user credentials
      * @return ResponseEntity containing past events or error message if none found
      */
-    @GetMapping("my/past")
+    @GetMapping("/hosted/past")
     public ResponseEntity<?> getAllMyPastEvents(Authentication authentication){
         String username = authentication.getName();
 
