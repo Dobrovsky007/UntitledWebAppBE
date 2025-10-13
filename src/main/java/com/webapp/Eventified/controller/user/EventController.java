@@ -100,10 +100,10 @@ public class EventController {
     @GetMapping("/hosted/upcoming")
     public ResponseEntity<?> getAllMyUpcomingEvents(Authentication authentication){
         String username = authentication.getName();
-        if (eventService.getMyEventsUpcoming(username).isEmpty()){
+        if (eventService.getHostedEventsUpcoming(username).isEmpty()){
             return ResponseEntity.status(500).body("No upcoming events found");
         } else {
-            return ResponseEntity.ok(eventService.getMyEventsUpcoming(username));
+            return ResponseEntity.ok(eventService.getHostedEventsUpcoming(username));
         }
     }
 
@@ -118,10 +118,10 @@ public class EventController {
     public ResponseEntity<?> getAllMyPastEvents(Authentication authentication){
         String username = authentication.getName();
 
-        if (eventService.getMyEventsPast(username).isEmpty()){
+        if (eventService.getHostedEventsPast(username).isEmpty()){
             return ResponseEntity.status(500).body("No past events found");
         } else {
-            return ResponseEntity.ok(eventService.getMyEventsPast(username));
+            return ResponseEntity.ok(eventService.getHostedEventsPast(username));
         }
 
     }
@@ -243,6 +243,17 @@ public class EventController {
             }
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid filtered parameters" + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> getMyAttendedPastEvents(Authentication authentication){
+
+        String username = authentication.getName();
+
+        if (eventService.getMyAttendedPastEvents(username).isEmpty()) {
+            return ResponseEntity.status(500).body("No past attended events found");
+        } else{
+            return ResponseEntity.ok(eventService.getMyAttendedPastEvents(username));
         }
     }
 }
