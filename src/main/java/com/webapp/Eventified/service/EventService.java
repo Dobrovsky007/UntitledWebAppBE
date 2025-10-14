@@ -280,4 +280,6 @@ public class EventService {
 
         return upcomingAttendedEvents;
     }
+
+    
 }

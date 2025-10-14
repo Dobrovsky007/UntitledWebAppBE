@@ -121,7 +121,7 @@ public class SecurityConfig {
                         
                         // User endpoints
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/events/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/event/**").hasAnyRole("USER", "ADMIN")
                         
                         // All other requests need authentication
                         .anyRequest().authenticated()

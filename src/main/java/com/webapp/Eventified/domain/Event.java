@@ -90,6 +90,7 @@ public class Event {
         this.endTime = endTime;
         this.capacity = capacity;
         this.statusOfEvent = 0;
+        this.occupied = 0;
         this.createdAt = LocalDateTime.now();
     }
 }
