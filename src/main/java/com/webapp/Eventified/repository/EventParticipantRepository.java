@@ -1,5 +1,6 @@
 package com.webapp.Eventified.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,4 +12,5 @@ import com.webapp.Eventified.domain.id.EventParticipantId;
 public interface EventParticipantRepository extends JpaRepository<EventParticipant, EventParticipantId> {
     Optional<EventParticipant> findByUserIdAndEventId(UUID userId, UUID eventId);
     Optional<EventParticipant> findByUserIdAndRoleOfParticipant(UUID userId, Integer roleOfParticipant);
+    List<EventParticipant> findByEventId(UUID eventId);
 }
