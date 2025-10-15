@@ -21,6 +21,28 @@ public class NotificationController {
     @GetMapping
     public ResponseEntity<?> getUserNotifications(Authentication authetication){
         String username = authetication.getName();
-        return ResponseEntity.ok(notificationService.getUserNotifications(username));
+        if(notificationService.getUserNotifications(username).isEmpty()){
+            return ResponseEntity.status(500).body("No notifications found for user");
+        } else{
+            return ResponseEntity.ok(notificationService.getUserNotifications(username));
+        }
+    }
+
+    @GetMapping("/unread")
+    public ResponseEntity<?> getUserUnreadNotifications(Authentication authetication){
+        String username = authetication.getName();
+
+        if(notificationService.getUnreadUserNotifications(username).isEmpty()){
+            return ResponseEntity.status(500).body("No unread notifications found for user");
+        } else{
+            return ResponseEntity.ok(notificationService.getUnreadUserNotifications(username));
+        }
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> getUnreadCount(Authentication authentication){
+        String username = authentication.getName();
+        
+        return ResponseEntity.ok(notificationService.getUnreadCount(username));
     }
 }
