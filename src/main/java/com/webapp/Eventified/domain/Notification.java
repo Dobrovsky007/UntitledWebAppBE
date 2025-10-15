@@ -21,7 +21,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "notifications")
-public class Notifications {
+public class Notification {
 
     @EqualsAndHashCode.Include
     @Id
@@ -57,11 +57,11 @@ public class Notifications {
     @JoinColumn(name = "event_id", insertable = false, nullable = false)
     private Event event;
 
-    public Notifications() {
+    public Notification() {
 
     }
 
-    public Notifications(UUID userId, UUID eventId, Integer typeOfNotification, String title,
+    public Notification(UUID userId, UUID eventId, Integer typeOfNotification, String title,
             String messageOfNotification) {
         this.userId = userId;
         this.eventId = eventId;

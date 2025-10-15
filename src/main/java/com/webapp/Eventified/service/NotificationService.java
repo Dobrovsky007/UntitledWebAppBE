@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.EventParticipant;
-import com.webapp.Eventified.domain.Notifications;
+import com.webapp.Eventified.domain.Notification;
 import com.webapp.Eventified.domain.SportUser;
+import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.NotificationRepository;
 import com.webapp.Eventified.repository.SportUserRepository;
@@ -125,10 +126,38 @@ public class NotificationService {
     }
 
     private void createSaveNotification(UUID userId, UUID eventId, Integer typeOfNotification, String title, String messageOfNotification) {
-        Notifications notification = new Notifications(userId, eventId, typeOfNotification, title,
+        Notification notification = new Notification(userId, eventId, typeOfNotification, title,
                 messageOfNotification);
         notificationRepository.save(notification);
     }
 
-    
+    public List<Notification> getUserNotifications(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return notificationRepository.findByUserIdOrderByCreatedAtDesc(user.getId());
+    }
+
+    public List<Notification> getUnreadUserNotifications(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return notificationRepository.findByUserIdAndIsReadOrderByCreatedAtDesc(user.getId(), false);
+    }
+
+    public int getUnreadCount(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return notificationRepository.countByUserIdAndIsRead(user.getId(), false).intValue();
+    }
+
+    public boolean markAsRead(UUID notificationId){
+        return notificationRepository.findById(notificationId)
+                .map(notification -> {
+                    notification.setIsRead(true);
+                    notificationRepository.save(notification);
+                    return true;
+                }).orElse(false);
+    }
 }
