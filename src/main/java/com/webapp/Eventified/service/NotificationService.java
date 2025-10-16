@@ -160,4 +160,17 @@ public class NotificationService {
                     return true;
                 }).orElse(false);
     }
+
+    public boolean markAllAsRead(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        List<Notification> unreadNotifications = notificationRepository.findByUserId(user.getId());
+
+        for(Notification notification : unreadNotifications){
+            notification.setIsRead(true);
+            notificationRepository.save(notification);
+        }
+        return true;
+    }
 }

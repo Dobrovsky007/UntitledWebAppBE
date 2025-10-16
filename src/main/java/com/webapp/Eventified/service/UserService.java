@@ -5,8 +5,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.EventParticipant;
 import com.webapp.Eventified.domain.SportUser;
 import com.webapp.Eventified.domain.User;
@@ -14,6 +16,7 @@ import com.webapp.Eventified.dto.admin.UserInfoAdmin;
 import com.webapp.Eventified.dto.user.SportDTO;
 import com.webapp.Eventified.dto.user.UserProfileDTO;
 import com.webapp.Eventified.repository.EventParticipantRepository;
+import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.SportUserRepository;
 import com.webapp.Eventified.repository.UserRepository;
 
@@ -26,6 +29,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final EventParticipantRepository eventParticipantRepository;
     private final SportUserRepository sportUserRepository;
+    private final EventRepository eventRepository;
+
+    @Autowired
+    private final NotificationService notificationService;
 
     /**
      * Retrieves user profile information for a specific user by their ID.
@@ -137,6 +144,12 @@ public class UserService {
 
         EventParticipant participant = new EventParticipant(user.getId(), eventId);
         eventParticipantRepository.save(participant);
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+
+        notificationService.notifyNewPlayerJoined(eventId, event.getOrganizer().getId(), username);
+
         return true;
     }
 

@@ -46,7 +46,9 @@ public class EventStatusSchedulerService {
                 log.info("Found {} events to update to PAST status", eventsToUpdate.size());
 
                 for(Event event : eventsToUpdate){
-                    event.setStatusOfEvent(STATUS_PAST);
+                    if (event.getStatusOfEvent() != 3) {
+                        event.setStatusOfEvent(STATUS_PAST);
+                    }
                 }
                 
                 eventRepository.saveAll(eventsToUpdate);
@@ -62,7 +64,9 @@ public class EventStatusSchedulerService {
             log.info("Found {} events to update to ONGOING status", eventsToUpdate.size());
 
             for(Event event : eventsToUpdate){
-                event.setStatusOfEvent(STATUS_ONGOING);
+                if (event.getStatusOfEvent() != 3) {
+                    event.setStatusOfEvent(STATUS_ONGOING);
+                }
             }
 
             eventRepository.saveAll(eventsToUpdate);
@@ -70,5 +74,4 @@ public class EventStatusSchedulerService {
         }
         return 0;
     }
-
 }

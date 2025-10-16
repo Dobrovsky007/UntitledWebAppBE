@@ -2,8 +2,12 @@ package com.webapp.Eventified.controller.user;
 
 import org.springframework.security.core.Authentication;
 
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,4 +49,26 @@ public class NotificationController {
         
         return ResponseEntity.ok(notificationService.getUnreadCount(username));
     }
+
+    @PutMapping("/read/{id}")
+    public ResponseEntity<?> markAsRead(@PathVariable UUID id){
+        if(notificationService.markAsRead(id)){
+            return ResponseEntity.ok("Notification marked as read");
+        } else{
+            return ResponseEntity.status(500).body("Failed to mark notification as read");
+        }
+    }
+
+    @PutMapping("/read/all")
+    public ResponseEntity<?> markAllAsRead(Authentication authentication){
+        String username = authentication.getName();
+
+        if(notificationService.markAllAsRead(username)){
+            return ResponseEntity.ok("All notifications were marked as read");
+        }else{
+            return ResponseEntity.status(500).body("Failed to mark all notifications as read");
+        }
+    }
+
+    
 }
