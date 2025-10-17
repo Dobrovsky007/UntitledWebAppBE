@@ -9,6 +9,7 @@ import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;
 import com.webapp.Eventified.service.EventService;
+import com.webapp.Eventified.service.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,14 +22,19 @@ class EventServiceTest {
     private EventRepository eventRepository;
     private UserRepository userRepository;
     private EventParticipantRepository eventParticipantRepository;
+    private final NotificationService notificationService;
     private EventService eventService;
 
-    @BeforeEach
+  EventServiceTest(NotificationService notificationService) {
+    this.notificationService = notificationService;
+  }
+
+  @BeforeEach
     void setUp() {
         eventRepository = mock(EventRepository.class);
         userRepository = mock(UserRepository.class);
         eventParticipantRepository = mock(EventParticipantRepository.class);
-        eventService = new EventService(eventRepository, userRepository, eventParticipantRepository);
+        eventService = new EventService(eventRepository, userRepository, eventParticipantRepository, notificationService);
     }
 
     @Test

@@ -7,9 +7,11 @@ import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.user.UserProfileDTO;
 import com.webapp.Eventified.domain.SportUser;
 import com.webapp.Eventified.domain.EventParticipant;
+import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.SportUserRepository;
 import com.webapp.Eventified.repository.UserRepository;
 import com.webapp.Eventified.repository.EventParticipantRepository;
+import com.webapp.Eventified.service.NotificationService;
 import com.webapp.Eventified.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.UUID;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class UserServiceTest {
 
@@ -24,12 +27,19 @@ class UserServiceTest {
     private EventParticipantRepository eventParticipantRepository;
     private UserService userService;
     private SportUserRepository sportUserRepository;
+    private EventRepository eventRepository;
+    private final NotificationService notificationService;
 
-    @BeforeEach
+  UserServiceTest(NotificationService notificationService) {
+    this.notificationService = notificationService;
+  }
+
+
+  @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         eventParticipantRepository = mock(EventParticipantRepository.class);
-        userService = new UserService(userRepository, eventParticipantRepository, sportUserRepository);
+        userService = new UserService(userRepository, eventParticipantRepository, sportUserRepository, eventRepository, notificationService);
     }
 
     @Test
