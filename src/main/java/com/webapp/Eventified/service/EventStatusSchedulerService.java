@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EventStatusSchedulerService {
 
     private final EventRepository eventRepository;
+    private final NotificationService notificationService;
 
     private static final Integer STATUS_PAST = 2;
     private static final Integer STATUS_ONGOING = 1;
@@ -35,6 +36,40 @@ public class EventStatusSchedulerService {
 
         if(pastUpdatedCount > 0 || ongoingUpdatedCount > 0){
             log.info("Event status update completed. Events marked as PAST: {}, Events marked as ONGOING: {}", pastUpdatedCount, ongoingUpdatedCount);
+        }
+    }
+
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void sendEventReminders() throws Exception {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime reminderTime = now.plusHours(1);
+
+        List<Event> eventsToRemind = eventRepository.findEventByStatusAndStartTime(STATUS_ACTIVE, reminderTime);
+
+        for(Event event : eventsToRemind){
+            if (!event.getReminderSent()) {
+                 notificationService.notifyEventReminder(event.getId());
+                 event.setReminderSent(true);
+                 eventRepository.save(event);
+            }
+        }
+    }
+
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void sendRatingReminders() throws Exception{
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime ratingReminderTime = now.minusMinutes(30);
+
+        List<Event> eventsToBeRated = eventRepository.findEventByStatusAndEndTime(STATUS_PAST, ratingReminderTime);
+
+        for(Event event : eventsToBeRated){
+            if(!event.getRated()){
+                notificationService.notifyRateParticipants(event.getId(), event.getOrganizer().getId());
+                event.setRated(true);
+                eventRepository.save(event);
+            }
         }
     }
 

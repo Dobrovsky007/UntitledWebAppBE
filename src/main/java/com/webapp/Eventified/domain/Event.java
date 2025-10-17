@@ -73,6 +73,12 @@ public class Event {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "reminder_sent", nullable = false)
+    private Boolean reminderSent;
+
+    @Column(name = "rated", nullable = false)
+    private Boolean rated;
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private Set<EventParticipant> participants = new HashSet<>();
 
@@ -91,6 +97,8 @@ public class Event {
         this.capacity = capacity;
         this.statusOfEvent = 0;
         this.occupied = 0;
+        this.reminderSent = false;
+        this.rated = false;
         this.createdAt = LocalDateTime.now();
     }
 }

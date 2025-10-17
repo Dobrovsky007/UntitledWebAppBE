@@ -63,16 +63,13 @@ public class NotificationService {
         return true;
     }
 
-    public boolean notifyRateParticipants(UUID eventId) {
-        List<EventParticipant> participants = eventParticipantRepository.findByEventId(eventId);
-
-        for (EventParticipant participant : participants) {
-            createSaveNotification(participant.getUserId(),
+    public boolean notifyRateParticipants(UUID eventId, UUID organizerId) {
+            createSaveNotification(organizerId,
                     eventId,
                     RATE_PARTICIPANTS,
                     "Rate Participants",
                     "Please rate the participants of the event you attended");
-        }
+        
         return true;
     }
 
@@ -168,8 +165,10 @@ public class NotificationService {
         List<Notification> unreadNotifications = notificationRepository.findByUserId(user.getId());
 
         for(Notification notification : unreadNotifications){
-            notification.setIsRead(true);
-            notificationRepository.save(notification);
+            if(!notification.getIsRead()){
+                notification.setIsRead(true);
+                notificationRepository.save(notification);
+            }
         }
         return true;
     }
