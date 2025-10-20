@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventified-backend
+  labels:
+    app: eventified-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventified-backend
+  template:
+    metadata:
+      labels:
+        app: eventified-backend
+    spec:
+      containers:
+        - name: eventified-backend
+          image: __DOCKER_IMAGE__
+          envFrom:
+            - configMapRef:
+                name: eventified-backend-config
+          ports:
+            - containerPort: 8080
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+          imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+        - name: regcred-backend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventified-backend-service
+spec:
+  selector:
+    app: eventified-backend
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http
+  type: ClusterIP
