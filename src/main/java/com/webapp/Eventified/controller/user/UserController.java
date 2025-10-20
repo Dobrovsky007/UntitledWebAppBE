@@ -67,6 +67,17 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/event/leave")
+    public ResponseEntity<?> leaveEvent(@RequestParam UUID eventId, Authentication authentication){
+        String username = authentication.getName();
+        
+        if (!userService.leaveEvent(username, eventId)){
+            return ResponseEntity.status(500).body("Failed to leave the event.");
+        } else {
+            return ResponseEntity.ok("Successfully left the event.");
+        }
+    }
+
     /**
      * Permanently deletes the authenticated user's account and all associated data.
      * This operation cannot be undone and removes all user data from the system.

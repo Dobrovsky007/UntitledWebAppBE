@@ -153,6 +153,21 @@ public class UserService {
         return true;
     }
 
+    public boolean leaveEvent(String username, UUID eventId){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        EventParticipant participant = eventParticipantRepository.findByUserIdAndEventId(user.getId(), eventId)
+                .orElseThrow(() -> new IllegalArgumentException("User is not a participant of the event"));
+
+        User organizer = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"))
+                .getOrganizer();
+
+        notificationService.notifyPlayerLeft(eventId, organizer.getId(), username);
+        eventParticipantRepository.delete(participant);
+        return true;
+    }
     /**
      * Permanently deletes a user account and all associated data from the system.
      * This operation cascades to remove all related records including sports
