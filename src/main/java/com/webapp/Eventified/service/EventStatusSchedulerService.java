@@ -45,7 +45,7 @@ public class EventStatusSchedulerService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime reminderTime = now.plusHours(1);
 
-        List<Event> eventsToRemind = eventRepository.findEventByStatusAndStartTime(STATUS_ACTIVE, reminderTime);
+        List<Event> eventsToRemind = eventRepository.findEventByStatusOfEventAndStartTime(STATUS_ACTIVE, reminderTime);
 
         for(Event event : eventsToRemind){
             if (!event.getReminderSent()) {
@@ -62,7 +62,7 @@ public class EventStatusSchedulerService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime ratingReminderTime = now.minusMinutes(30);
 
-        List<Event> eventsToBeRated = eventRepository.findEventByStatusAndEndTime(STATUS_PAST, ratingReminderTime);
+        List<Event> eventsToBeRated = eventRepository.findEventByStatusOfEventAndEndTime(STATUS_PAST, ratingReminderTime);
 
         for(Event event : eventsToBeRated){
             if(!event.getRated()){
