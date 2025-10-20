@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.UUID;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 class UserServiceTest {
 
