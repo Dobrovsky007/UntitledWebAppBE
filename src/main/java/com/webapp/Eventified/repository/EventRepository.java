@@ -29,6 +29,6 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     List<Event> findEventsToMarkAsOngoing(@Param("currentTime") LocalDateTime currentTime, @Param("activeStatus") Integer activeStatus, @Param("ongoingStatus") Integer ongoingStatus);
    
 
-    List<Event> findEventByStatusAndStartTime(int i, LocalDateTime reminderTime);
-    List<Event> findEventByStatusAndEndTime(Integer statusPast, LocalDateTime ratingReminderTime);
+    List<Event> findEventByStatusOfEventAndStartTime(int i, LocalDateTime reminderTime);
+    List<Event> findEventByStatusOfEventAndEndTime(Integer statusPast, LocalDateTime ratingReminderTime);
 }
