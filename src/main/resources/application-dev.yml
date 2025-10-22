@@ -31,3 +31,13 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
+# Spring Boot Actuator endpoints for health checks
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
