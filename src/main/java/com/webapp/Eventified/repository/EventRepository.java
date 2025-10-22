@@ -3,6 +3,7 @@ package com.webapp.Eventified.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,17 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     List<Event> findEventByStatusOfEventAndStartTime(int i, LocalDateTime reminderTime);
     List<Event> findEventByStatusOfEventAndEndTime(Integer statusPast, LocalDateTime ratingReminderTime);
+
+     @Query("SELECT e FROM Event e WHERE e.startTime > :now " +
+           "AND e.statusOfEvent = 0 " +
+           "AND e.id NOT IN (SELECT ep.eventId FROM EventParticipant ep WHERE ep.userId = :userId)")
+    List<Event> findUpcomingEventsNotAttendedByUser(@Param("userId") UUID userId, @Param("now") LocalDateTime now);
+    
+    @Query("SELECT e FROM Event e WHERE e.sport IN :sportIds " +
+           "AND e.startTime > :now AND e.statusOfEvent = 0")
+    List<Event> findEventsBySports(@Param("sportIds") Set<Integer> sportIds, @Param("now") LocalDateTime now);
+    
+    @Query("SELECT e FROM Event e WHERE e.skillLevel BETWEEN :minSkill AND :maxSkill " +
+           "AND e.startTime > :now AND e.statusOfEvent = 0")
+    List<Event> findEventsBySkillRange(@Param("minSkill") Integer minSkill, @Param("maxSkill") Integer maxSkill, @Param("now") LocalDateTime now);
 }
