@@ -20,6 +20,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: eventified-backend-config
+            - secretRef:
+                name: eventified-backend-secret
           ports:
             - containerPort: 8080
               name: http
