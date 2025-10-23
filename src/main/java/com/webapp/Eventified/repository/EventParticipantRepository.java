@@ -19,8 +19,8 @@ public interface EventParticipantRepository extends JpaRepository<EventParticipa
     Optional<EventParticipant> findByUserIdAndRoleOfParticipant(UUID userId, Integer roleOfParticipant);
     List<EventParticipant> findByEventId(UUID eventId);
 
-    @Query("SELECT e FROM EventParticipant ep" + 
-            "JOIN Event e ON ep.eventId = e.id WHERE ep.userId = :userId" + 
+    @Query("SELECT e FROM EventParticipant ep " + 
+            "JOIN Event e ON ep.eventId = e.id WHERE ep.userId = :userId " + 
             "ORDER BY e.startTime DESC")
     List<Event> findAllEventsByUserId(@Param("userId")UUID userId);
 
@@ -30,7 +30,7 @@ public interface EventParticipantRepository extends JpaRepository<EventParticipa
            "WHERE ep.userId = :userId")
     Set<Integer> findSportsFromUserHistory(@Param("userId")UUID userId);
 
-    @Query("SELECT e FROM EventParticipant ep JOIN Event e ON ep.eventId = e.id" +
+    @Query("SELECT e FROM EventParticipant ep JOIN Event e ON ep.eventId = e.id " +
            "WHERE ep.userId = :userId " +
            "AND e.endTime < :now " +
            "ORDER BY e.startTime DESC")
