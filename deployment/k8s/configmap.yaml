@@ -4,20 +4,14 @@ metadata:
   name: eventified-backend-config
   namespace: eventified
 data:
-  # Database Configuration
-  DB_USER: "postgres"
-  DB_PASS: "1234"
-  DB_PORT: "5432"
-  DB_HOST: "postgresql-service"  # Kubernetes service name for PostgreSQL
-  
-  # JWT Configuration
-  JWT_SECRET: "a68586b7ccd450a4a5b251737d69aaf91e5d666513df18fccba63f7e75755cdfef0c468424e65884a43b3d5c57860e4891966ac39379f089117b7092c5735b46"
-  JWT_EXPIRATION: "3600000"
-  
-  # Application Configuration
+  # Application Configuration (non-sensitive)
   SPRING_PROFILES_ACTIVE: "prod"
   SPRING_JPA_HIBERNATE_DDL_AUTO: "validate"
   SPRING_JPA_SHOW_SQL: "false"
   
   # Server Configuration
   SERVER_PORT: "8080"
+  
+  # Actuator Configuration
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info"
+  MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "when-authorized"
