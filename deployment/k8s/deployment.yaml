@@ -6,6 +6,11 @@ metadata:
     app: eventified-backend
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app: eventified-backend
@@ -14,6 +19,7 @@ spec:
       labels:
         app: eventified-backend
     spec:
+      terminationGracePeriodSeconds: 60
       containers:
         - name: eventified-backend
           image: __DOCKER_IMAGE__
@@ -29,7 +35,7 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 120
+            initialDelaySeconds: 300  # Increased from 120 to 5 minutes
             periodSeconds: 30
             timeoutSeconds: 10
             failureThreshold: 3
@@ -37,17 +43,17 @@ spec:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 90
+            initialDelaySeconds: 300  # Increased from 90 to 5 minutes
             periodSeconds: 15
             timeoutSeconds: 10
             failureThreshold: 5
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "250m"
+              memory: "1Gi"     # Increased from 512Mi
+              cpu: "500m"       # Increased from 250m
             limits:
-              memory: "1Gi"
-              cpu: "500m"
+              memory: "2Gi"     # Increased from 1Gi
+              cpu: "1000m"      # Increased from 500m
           imagePullPolicy: IfNotPresent
       imagePullSecrets:
         - name: regcred-backend

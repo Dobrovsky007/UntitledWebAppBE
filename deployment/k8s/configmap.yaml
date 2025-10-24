@@ -15,3 +15,6 @@ data:
   # Actuator Configuration
   MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info"
   MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "when-authorized"
+  
+  # JVM Optimization for faster startup
+  JAVA_OPTS: "-Xms1g -Xmx1g -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+OptimizeStringConcat -Djava.security.egd=file:/dev/./urandom"
