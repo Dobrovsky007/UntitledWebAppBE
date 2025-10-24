@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.EventParticipant;
@@ -16,7 +17,6 @@ import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +38,6 @@ public class RecommendationService {
 
         List<Event> userEventHistory = eventParticipantRepository.findAllEventsByUserId(user.getId());
 
-        List<Event> candidateEvents = get
     }
 
     private List<Event> getCandidateEvents(User user){
@@ -59,8 +58,6 @@ public class RecommendationService {
                 List<Event> historicalSportEvents = eventRepository.findEventsBySports(historicalSports, now);
                 prefferedSportEvents.addAll(historicalSportEvents);
             }
-
-            
 
         }
 
