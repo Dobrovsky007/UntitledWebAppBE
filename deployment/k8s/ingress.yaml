@@ -1,23 +1,6 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: eventified-backend-ingress
-  namespace: eventified
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: eventified-strip-prefix-eventified-api@kubernetescrd
-spec:
-  rules:
-    - host: eventified-api.local  # Change this to your domain
-      http:
-        paths:
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: eventified-backend-service
-                port:
-                  number: 8080
+# Backend ingress is handled by the frontend ingress configuration
+# This file can be removed or kept for backend-specific routes only
+# The main routing is defined in UntitledWebAppFE/deployment/k8s/ingress.yaml
   # Uncomment below for HTTPS
   # tls:
   #   - hosts:
