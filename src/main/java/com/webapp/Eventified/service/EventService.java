@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.dto.user.EventDetailsDTO;
+import com.webapp.Eventified.dto.user.EventParticipantDTO;
 import com.webapp.Eventified.dto.user.EventPoolDTO;
 import com.webapp.Eventified.dto.user.EventUpdateRequest;
 import com.webapp.Eventified.repository.EventParticipantRepository;
@@ -332,5 +335,36 @@ public class EventService {
                 } else {
                         return false;
                 }
+        }
+
+        public EventDetailsDTO getEventDetails(UUID eventId){
+
+                Event event = eventRepository.findById(eventId)
+                                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        
+                return mapToEventDetailsDTO(event);
+        }
+
+        private EventDetailsDTO mapToEventDetailsDTO(Event event){
+                EventDetailsDTO dto = new EventDetailsDTO();
+                dto.setTitle(event.getTitle());
+                dto.setSport(event.getSport());
+                dto.setAddress(event.getAddress());
+                dto.setCapacity(event.getCapacity());
+                dto.setOccupied(event.getOccupied());
+                dto.setStartTime(event.getStartTime());
+                dto.setEndTime(event.getEndTime());
+                dto.setSkillLevel(event.getSkillLevel());
+                dto.setLatitude(event.getLatitude());
+                dto.setLongitude(event.getLongitude());
+                dto.setParticipants(event.getParticipants()
+                                .stream()
+                                .map(ep -> {
+                                        EventParticipantDTO participantDTO = new EventParticipantDTO();
+                                        participantDTO.setUsername(ep.getUser().getUsername());
+                                        return participantDTO;
+                                })
+                                .collect(Collectors.toSet()));
+                return dto;
         }
 }

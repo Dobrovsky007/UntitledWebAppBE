@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -267,6 +268,16 @@ public class EventController {
             return ResponseEntity.status(500).body("No upcoming attended events found");
         } else{
             return ResponseEntity.ok(eventService.getMyAttendedUpcomingEvents(username));
+        }
+    }
+
+    @GetMapping("/details/{eventId}")
+    public ResponseEntity<?> getEventDetails(@PathVariable UUID eventId){
+        
+        if (eventService.getEventDetails(eventId).equals(null)) {
+            return ResponseEntity.status(500).body("Event not found");
+        } else{
+            return ResponseEntity.ok(eventService.getEventDetails(eventId));
         }
     }
 }
