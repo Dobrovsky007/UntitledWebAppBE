@@ -5,6 +5,13 @@ import java.time.LocalDateTime;
 
 import lombok.Data;
 
+/**
+ * Data Transfer Object for event creation requests.
+ * Contains all necessary information to create a new event.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Data
 public class EventRequest {
     private String title;

@@ -15,6 +15,13 @@ import com.webapp.Eventified.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * REST controller for notification-related endpoints.
+ * Provides API endpoints for managing user notifications.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
@@ -22,6 +29,12 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
+    /**
+     * Retrieves all notifications for the authenticated user.
+     *
+     * @param authetication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity containing all user notifications or error if none found
+     */
     @GetMapping
     public ResponseEntity<?> getUserNotifications(Authentication authetication){
         String username = authetication.getName();
@@ -32,6 +45,12 @@ public class NotificationController {
         }
     }
 
+    /**
+     * Retrieves only unread notifications for the authenticated user.
+     *
+     * @param authetication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity containing unread notifications or error if none found
+     */
     @GetMapping("/unread")
     public ResponseEntity<?> getUserUnreadNotifications(Authentication authetication){
         String username = authetication.getName();
@@ -43,6 +62,12 @@ public class NotificationController {
         }
     }
 
+    /**
+     * Gets the count of unread notifications for the authenticated user.
+     *
+     * @param authentication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity containing the count of unread notifications
+     */
     @GetMapping("/count")
     public ResponseEntity<?> getUnreadCount(Authentication authentication){
         String username = authentication.getName();
@@ -50,6 +75,12 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.getUnreadCount(username));
     }
 
+    /**
+     * Marks a specific notification as read.
+     *
+     * @param id the unique identifier of the notification to mark as read
+     * @return ResponseEntity with success message if marked, or error if operation failed
+     */
     @PutMapping("/read/{id}")
     public ResponseEntity<?> markAsRead(@PathVariable UUID id){
         if(notificationService.markAsRead(id)){
@@ -59,6 +90,12 @@ public class NotificationController {
         }
     }
 
+    /**
+     * Marks all notifications for the authenticated user as read.
+     *
+     * @param authentication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity with success message if all marked, or error if operation failed
+     */
     @PutMapping("/read/all")
     public ResponseEntity<?> markAllAsRead(Authentication authentication){
         String username = authentication.getName();

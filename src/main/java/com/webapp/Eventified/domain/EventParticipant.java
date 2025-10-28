@@ -17,6 +17,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Entity representing the participation relationship between a user and an event.
+ * Uses a composite key of userId and eventId.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Getter
 @Setter
 @ToString(exclude = {"user", "event"})
@@ -50,8 +57,18 @@ public class EventParticipant {
     @JoinColumn(name = "event_id", insertable = false, updatable = false)
     private Event event;
 
+    /**
+     * Default constructor for JPA.
+     */
     public EventParticipant(){}
 
+    /**
+     * Constructs a new EventParticipant with the specified user and event IDs.
+     * Sets the default role to 1 (regular participant) and records the join timestamp.
+     *
+     * @param userId the unique identifier of the user joining the event
+     * @param eventId the unique identifier of the event being joined
+     */
     public EventParticipant(UUID userId, UUID eventId){
         this.userId = userId;
         this.eventId = eventId;

@@ -11,7 +11,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-
+/**
+ * Entity representing a user in the Eventified application.
+ * Manages user authentication, profile information, and relationships with events and sports.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Getter
 @Setter
 @ToString(exclude = {"sports", "organizedEvents", "eventParticipations"})
@@ -58,8 +64,19 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<EventParticipant> eventParticipations = new HashSet<>();
 
+    /**
+     * Default constructor for JPA.
+     */
     public User(){}
 
+    /**
+     * Constructs a new User with the specified credentials.
+     * Initializes default values for verification status, timestamps, and scores.
+     *
+     * @param username the unique username for the user
+     * @param email the unique email address for the user
+     * @param passwordHash the hashed password for authentication
+     */
     public User(String username, String email, String passwordHash){
         this.username = username;
         this.email = email;

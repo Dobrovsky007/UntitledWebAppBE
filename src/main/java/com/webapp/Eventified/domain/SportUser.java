@@ -12,6 +12,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Entity representing the relationship between a user and a sport.
+ * Stores the user's skill level for each sport they participate in.
+ * Uses a composite key of userId and sport.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Getter
 @Setter
 @ToString(exclude = {"user"})
@@ -38,9 +46,19 @@ public class SportUser {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
+    /**
+     * Default constructor for JPA.
+     */
     public SportUser(){
     }
 
+    /**
+     * Constructs a new SportUser with the specified user ID, sport, and skill level.
+     *
+     * @param id the unique identifier of the user
+     * @param sport the integer identifier of the sport type
+     * @param skillLevel the user's skill level for this sport
+     */
     public SportUser(UUID id, Integer sport, Integer skillLevel){
         this.userId = id;
         this.sport = sport;

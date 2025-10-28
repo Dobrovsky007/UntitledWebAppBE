@@ -17,6 +17,13 @@ import com.webapp.Eventified.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Service class for managing notification operations in the Eventified application.
+ * Handles creation and distribution of notifications for various event-related activities.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -34,6 +41,13 @@ public class NotificationService {
     private final Integer EVENT_UPDATE = 6;
     private final Integer PLAYER_LEFT = 7;
 
+    /**
+     * Notifies users about a new event that matches their sport and skill level preferences.
+     * Sends notifications to all interested users except the event organizer.
+     *
+     * @param event the newly created event
+     * @return true if notifications were successfully sent
+     */
     public boolean notifyUsersOfNewEvent(Event event) {
         List<SportUser> interestedUsers = sportUserRepository.findUserBySportAndSkillLevel(event.getSport(),
                 event.getSkillLevel());
@@ -50,6 +64,12 @@ public class NotificationService {
         return true;
     }
 
+    /**
+     * Notifies all participants that an event has been cancelled.
+     *
+     * @param eventId the unique identifier of the cancelled event
+     * @return true if notifications were successfully sent
+     */
     public boolean notifyEventCancelled(UUID eventId) {
         List<EventParticipant> participants = eventParticipantRepository.findByEventId(eventId);
 
@@ -63,6 +83,13 @@ public class NotificationService {
         return true;
     }
 
+    /**
+     * Notifies the event organizer to rate participants after an event has ended.
+     *
+     * @param eventId the unique identifier of the event
+     * @param organizerId the unique identifier of the event organizer
+     * @return true if notification was successfully sent
+     */
     public boolean notifyRateParticipants(UUID eventId, UUID organizerId) {
             createSaveNotification(organizerId,
                     eventId,
@@ -73,6 +100,12 @@ public class NotificationService {
         return true;
     }
 
+    /**
+     * Sends a reminder notification to all participants of an upcoming event.
+     *
+     * @param eventId the unique identifier of the event
+     * @return true if notifications were successfully sent
+     */
     public boolean notifyEventReminder(UUID eventId) {
         List<EventParticipant> participants = eventParticipantRepository.findByEventId(eventId);
 
@@ -86,6 +119,14 @@ public class NotificationService {
         return true;
     }
 
+    /**
+     * Notifies the event organizer when a new player joins their event.
+     *
+     * @param eventId the unique identifier of the event
+     * @param organizerId the unique identifier of the event organizer
+     * @param playerUsername the username of the player who joined
+     * @return true if notification was successfully sent
+     */
     public boolean notifyNewPlayerJoined(UUID eventId, UUID organizerId, String playerUsername) {
 
         createSaveNotification(organizerId,
@@ -97,6 +138,12 @@ public class NotificationService {
         return true;
     }
 
+    /**
+     * Notifies all participants when event details have been updated.
+     *
+     * @param eventId the unique identifier of the updated event
+     * @return true if notifications were successfully sent
+     */
     public boolean notifyEventUpdate(UUID eventId) {
         List<EventParticipant> participants = eventParticipantRepository.findByEventId(eventId);
 
@@ -110,6 +157,14 @@ public class NotificationService {
         return true;
     }
 
+    /**
+     * Notifies the event organizer when a player leaves their event.
+     *
+     * @param eventId the unique identifier of the event
+     * @param organizerId the unique identifier of the event organizer
+     * @param playerUsername the username of the player who left
+     * @return true if notification was successfully sent
+     */
     public boolean notifyPlayerLeft(UUID eventId, UUID organizerId, String playerUsername) {
 
         createSaveNotification(organizerId,
@@ -122,12 +177,29 @@ public class NotificationService {
 
     }
 
+    /**
+     * Creates and saves a notification to the database.
+     * This is a private helper method used by all notification methods.
+     *
+     * @param userId the unique identifier of the user receiving the notification
+     * @param eventId the unique identifier of the event related to the notification
+     * @param typeOfNotification the integer identifier of the notification type
+     * @param title the title/subject of the notification
+     * @param messageOfNotification the detailed message content
+     */
     private void createSaveNotification(UUID userId, UUID eventId, Integer typeOfNotification, String title, String messageOfNotification) {
         Notification notification = new Notification(userId, eventId, typeOfNotification, title,
                 messageOfNotification);
         notificationRepository.save(notification);
     }
 
+    /**
+     * Retrieves all notifications for a specific user, ordered by creation time.
+     *
+     * @param username the username of the user
+     * @return List of all notifications for the user
+     * @throws IllegalArgumentException if the user is not found
+     */
     public List<Notification> getUserNotifications(String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -135,6 +207,13 @@ public class NotificationService {
         return notificationRepository.findByUserIdOrderByCreatedAtDesc(user.getId());
     }
 
+    /**
+     * Retrieves only unread notifications for a specific user, ordered by creation time.
+     *
+     * @param username the username of the user
+     * @return List of unread notifications for the user
+     * @throws IllegalArgumentException if the user is not found
+     */
     public List<Notification> getUnreadUserNotifications(String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -142,6 +221,13 @@ public class NotificationService {
         return notificationRepository.findByUserIdAndIsReadOrderByCreatedAtDesc(user.getId(), false);
     }
 
+    /**
+     * Gets the count of unread notifications for a specific user.
+     *
+     * @param username the username of the user
+     * @return the number of unread notifications
+     * @throws IllegalArgumentException if the user is not found
+     */
     public int getUnreadCount(String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -149,6 +235,12 @@ public class NotificationService {
         return notificationRepository.countByUserIdAndIsRead(user.getId(), false).intValue();
     }
 
+    /**
+     * Marks a specific notification as read.
+     *
+     * @param notificationId the unique identifier of the notification
+     * @return true if the notification was found and marked as read, false otherwise
+     */
     public boolean markAsRead(UUID notificationId){
         return notificationRepository.findById(notificationId)
                 .map(notification -> {
@@ -158,6 +250,13 @@ public class NotificationService {
                 }).orElse(false);
     }
 
+    /**
+     * Marks all notifications for a specific user as read.
+     *
+     * @param username the username of the user
+     * @return true if all notifications were successfully marked as read
+     * @throws IllegalArgumentException if the user is not found
+     */
     public boolean markAllAsRead(String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));

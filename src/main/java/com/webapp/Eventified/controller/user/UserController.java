@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import com.webapp.Eventified.dto.user.SportDTO;
 import com.webapp.Eventified.service.UserService;
 
+/**
+ * REST controller for user-related endpoints.
+ * Handles user profile operations and event participation management.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -67,6 +74,14 @@ public class UserController {
         }
     }
 
+    /**
+     * Allows the authenticated user to leave an event they previously joined.
+     * Removes the EventParticipant record linking the user to the event.
+     *
+     * @param eventId the unique identifier of the event to leave
+     * @param authentication the Spring Security authentication object containing user credentials
+     * @return ResponseEntity with success message if left successfully, or error if operation failed
+     */
     @DeleteMapping("/event/leave")
     public ResponseEntity<?> leaveEvent(@RequestParam UUID eventId, Authentication authentication){
         String username = authentication.getName();

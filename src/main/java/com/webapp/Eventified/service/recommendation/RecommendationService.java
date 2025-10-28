@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.EventParticipant;
 import com.webapp.Eventified.domain.SportUser;
 import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.user.EventPoolDTO;
@@ -24,6 +23,13 @@ import io.jsonwebtoken.lang.Collections;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Service class for providing personalized event recommendations to users.
+ * Uses content-based filtering to score and rank events based on user preferences and history.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,6 +40,16 @@ public class RecommendationService {
     private final EventParticipantRepository eventParticipantRepository;
     private final ContentBasedScorer contentBasedScorer;
     
+    /**
+     * Retrieves personalized event recommendations for a user.
+     * Generates recommendations based on user's sport preferences, past event history, and event scores.
+     * Returns events sorted by recommendation score in descending order.
+     *
+     * @param username the username of the user requesting recommendations
+     * @param limit the maximum number of recommendations to return
+     * @return List of recommended events as EventPoolDTO objects
+     * @throws IllegalArgumentException if the user is not found
+     */
     @Transactional(readOnly = true)
     public List<EventPoolDTO> getRecommendedEvents(String username, int limit){
         
@@ -63,6 +79,14 @@ public class RecommendationService {
         return recommendations;
     }
 
+    /**
+     * Retrieves candidate events for recommendation based on user's sports preferences and history.
+     * Filters events to include only upcoming events the user hasn't joined.
+     * Includes events from both user's preferred sports and sports from their event history.
+     *
+     * @param user the user for whom to retrieve candidate events
+     * @return List of candidate events for recommendation
+     */
     private List<Event> getCandidateEvents(User user){
 
         LocalDateTime now = LocalDateTime.now();
@@ -90,10 +114,26 @@ public class RecommendationService {
         return eventRepository.findUpcomingEventsNotAttendedByUser(user.getId(), now);  
     }
 
+    /**
+     * Checks whether a user has already joined a specific event.
+     *
+     * @param userId the unique identifier of the user
+     * @param eventId the unique identifier of the event
+     * @return true if the user has joined the event, false otherwise
+     */
     private boolean isUserJoined(UUID userId, UUID eventId){
         return eventParticipantRepository.findByUserIdAndEventId(userId, eventId).isPresent();
     }
 
+    /**
+     * Calculates recommendation scores for all candidate events.
+     * Uses the ContentBasedScorer to compute a score for each event based on user preferences and history.
+     *
+     * @param events the list of candidate events to score
+     * @param user the user for whom to calculate scores
+     * @param userEventHistory the list of events the user has previously attended
+     * @return Map of event IDs to their calculated recommendation scores
+     */
     private Map<UUID, Double> calculateEventScores(List<Event> events, User user, List<Event> userEventHistory){
         Map<UUID, Double> scores = new HashMap<>();
 

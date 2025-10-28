@@ -20,6 +20,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Entity representing an event in the Eventified application.
+ * Manages event details, location, timing, and participant capacity.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Getter
 @Setter
 @ToString(exclude = {"participants"})
@@ -82,8 +89,26 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private Set<EventParticipant> participants = new HashSet<>();
 
+    /**
+     * Default constructor for JPA.
+     */
     public Event(){}
 
+    /**
+     * Constructs a new Event with the specified details.
+     * Initializes default values for status, occupied slots, and notification flags.
+     *
+     * @param organizer the user organizing the event
+     * @param title the title of the event
+     * @param sport the integer identifier of the sport type
+     * @param skillLevel the required skill level for participants
+     * @param address the physical address of the event
+     * @param latitude the latitude coordinate of the event location
+     * @param longitude the longitude coordinate of the event location
+     * @param startTime the date and time when the event starts
+     * @param endTime the date and time when the event ends
+     * @param capacity the maximum number of participants allowed
+     */
     public Event(User organizer, String title, Integer sport, Integer skillLevel, String address, BigDecimal latitude, BigDecimal longitude, LocalDateTime startTime, LocalDateTime endTime, Integer capacity){
         this.organizer = organizer;
         this.title = title;

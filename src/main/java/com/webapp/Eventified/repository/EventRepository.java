@@ -13,6 +13,13 @@ import org.springframework.data.repository.query.Param;
 import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.User;
 
+/**
+ * Repository interface for Event entity operations.
+ * Provides database access methods for event management and queries.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 public interface EventRepository extends JpaRepository<Event, UUID> { 
     Optional<Event> findByTitle(String title);
     Optional<Event> findByOrganizer_Id(UUID userId);

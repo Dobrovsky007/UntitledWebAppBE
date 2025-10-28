@@ -14,6 +14,13 @@ import com.webapp.Eventified.domain.Event;
 import com.webapp.Eventified.domain.EventParticipant;
 import com.webapp.Eventified.domain.id.EventParticipantId;
 
+/**
+ * Repository interface for EventParticipant entity operations.
+ * Provides database access methods for managing event participation and retrieving participant history.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 public interface EventParticipantRepository extends JpaRepository<EventParticipant, EventParticipantId> {
     Optional<EventParticipant> findByUserIdAndEventId(UUID userId, UUID eventId);
     Optional<EventParticipant> findByUserIdAndRoleOfParticipant(UUID userId, Integer roleOfParticipant);

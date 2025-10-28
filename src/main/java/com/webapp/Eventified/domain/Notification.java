@@ -15,6 +15,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Entity representing a notification sent to users about events.
+ * Notifications can be for various purposes like event reminders, cancellations, or updates.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Getter
 @Setter
 @ToString(exclude = {"user", "event"})
@@ -57,10 +64,23 @@ public class Notification {
     @JoinColumn(name = "event_id", insertable = false, nullable = false)
     private Event event;
 
+    /**
+     * Default constructor for JPA.
+     */
     public Notification() {
 
     }
 
+    /**
+     * Constructs a new Notification with the specified details.
+     * Sets the notification as unread and records the creation timestamp.
+     *
+     * @param userId the unique identifier of the user receiving the notification
+     * @param eventId the unique identifier of the event related to the notification
+     * @param typeOfNotification the integer identifier of the notification type
+     * @param title the title/subject of the notification
+     * @param messageOfNotification the detailed message content of the notification
+     */
     public Notification(UUID userId, UUID eventId, Integer typeOfNotification, String title,
             String messageOfNotification) {
         this.userId = userId;

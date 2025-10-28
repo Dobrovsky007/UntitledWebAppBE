@@ -5,6 +5,13 @@ import com.webapp.Eventified.domain.Event;
 
 import lombok.Data;
 
+/**
+ * Data Transfer Object for event pool/listing information.
+ * Contains a subset of event information suitable for displaying in event lists.
+ *
+ * @author Eventified Team
+ * @version 1.0
+ */
 @Data
 public class EventPoolDTO {
     private String title;
@@ -14,6 +21,12 @@ public class EventPoolDTO {
     private Integer capacity;
     private Integer skillLevel;
 
+    /**
+     * Constructs an EventPoolDTO from an Event entity.
+     * Converts the event's data into a format suitable for API responses.
+     *
+     * @param event the Event entity to convert
+     */
     public EventPoolDTO(Event event) {
         this.title = event.getTitle();
         this.sport = event.getSport();
