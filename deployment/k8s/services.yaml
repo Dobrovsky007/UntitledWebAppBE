@@ -14,22 +14,3 @@ spec:
       protocol: TCP
       name: http
   type: ClusterIP
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: eventified-backend-nodeport
-  namespace: eventified
-  labels:
-    app: eventified-backend
-spec:
-  selector:
-    app: eventified-backend
-  ports:
-    - port: 8080
-      targetPort: 8080
-      nodePort: 30080
-      protocol: TCP
-      name: http
-  type: NodePort

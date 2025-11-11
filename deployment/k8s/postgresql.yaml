@@ -41,8 +41,9 @@ spec:
               memory: "512Mi"
               cpu: "500m"
       volumes:
-        - name: postgresql-storage
-          emptyDir: {}
+        - name: eventified-storage
+          persistentVolumeClaim:
+            claimName: eventified-pvc
 
 ---
 apiVersion: v1
