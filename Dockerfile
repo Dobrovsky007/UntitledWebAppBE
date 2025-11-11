@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y curl && \
 WORKDIR /app
 
 # Copy only the main executable JAR file from build stage
-COPY --from=build /app/target/EventifiedBackend-*.jar ./
+COPY target/EventifiedBackend-*.jar ./
 RUN find . -name "EventifiedBackend-*.jar" ! -name "*javadoc*" -exec mv {} app.jar \;
 
 # Change ownership to non-root user
