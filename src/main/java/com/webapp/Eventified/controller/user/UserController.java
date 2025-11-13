@@ -17,7 +17,7 @@ import com.webapp.Eventified.service.UserService;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
