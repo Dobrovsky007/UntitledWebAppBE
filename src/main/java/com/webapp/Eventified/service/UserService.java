@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.EventParticipant;
-import com.webapp.Eventified.domain.SportUser;
-import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.admin.UserInfoAdmin;
 import com.webapp.Eventified.dto.user.SportDTO;
 import com.webapp.Eventified.dto.user.UserProfileDTO;
+import com.webapp.Eventified.model.Event;
+import com.webapp.Eventified.model.EventParticipant;
+import com.webapp.Eventified.model.SportUser;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.SportUserRepository;

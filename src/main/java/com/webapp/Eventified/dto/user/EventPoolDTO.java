@@ -1,7 +1,7 @@
 package com.webapp.Eventified.dto.user;
 
 
-import com.webapp.Eventified.domain.Event;
+import com.webapp.Eventified.model.Event;
 
 import lombok.Data;
 

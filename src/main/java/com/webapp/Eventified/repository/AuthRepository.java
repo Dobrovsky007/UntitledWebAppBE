@@ -1,7 +1,8 @@
 package com.webapp.Eventified.repository;
 
-import com.webapp.Eventified.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.webapp.Eventified.model.User;
 
 import java.util.Optional;
 import java.util.UUID;

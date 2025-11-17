@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.webapp.Eventified.domain.Event;
+import com.webapp.Eventified.model.Event;
 import com.webapp.Eventified.repository.EventRepository;
 
 import jakarta.transaction.Transactional;

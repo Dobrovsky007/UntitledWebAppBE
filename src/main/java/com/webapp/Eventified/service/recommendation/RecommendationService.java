@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.SportUser;
-import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.user.EventPoolDTO;
+import com.webapp.Eventified.model.Event;
+import com.webapp.Eventified.model.SportUser;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;

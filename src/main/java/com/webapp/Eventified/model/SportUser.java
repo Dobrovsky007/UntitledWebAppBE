@@ -1,10 +1,10 @@
-package com.webapp.Eventified.domain;
+package com.webapp.Eventified.model;
 
 import jakarta.persistence.Entity;
 
 import java.util.UUID;
 
-import com.webapp.Eventified.domain.id.SportUserId;
+import com.webapp.Eventified.model.id.SportUserId;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

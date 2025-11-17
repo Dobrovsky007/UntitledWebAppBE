@@ -1,8 +1,8 @@
 package com.webapp.Eventified.service;
 
-import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.user.LoginRequest;
 import com.webapp.Eventified.dto.user.LoginResponse;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.AuthRepository;
 import com.webapp.Eventified.util.JWTutil;
 import lombok.RequiredArgsConstructor;

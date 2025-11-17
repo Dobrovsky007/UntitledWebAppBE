@@ -1,4 +1,4 @@
-package com.webapp.Eventified.domain.id;
+package com.webapp.Eventified.model.id;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventParticipantId implements Serializable {
+public class SportUserId implements Serializable {
     private UUID userId;
-    private UUID eventId;
+    private Integer sport;
 }

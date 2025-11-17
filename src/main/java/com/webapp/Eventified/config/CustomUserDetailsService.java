@@ -1,6 +1,6 @@
 package com.webapp.Eventified.config;
 
-import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.AuthRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

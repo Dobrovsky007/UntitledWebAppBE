@@ -1,4 +1,4 @@
-package com.webapp.Eventified.domain;
+package com.webapp.Eventified.model;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -13,14 +13,15 @@ import java.util.UUID;
 
 /**
  * Entity representing a user in the Eventified application.
- * Manages user authentication, profile information, and relationships with events and sports.
+ * Manages user authentication, profile information, and relationships with
+ * events and sports.
  *
  * @author Eventified Team
  * @version 1.0
  */
 @Getter
 @Setter
-@ToString(exclude = {"sports", "organizedEvents", "eventParticipations"})
+@ToString(exclude = { "sports", "organizedEvents", "eventParticipations" })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
@@ -64,20 +65,24 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<EventParticipant> eventParticipations = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SecureTokenEmail> tokens = new HashSet<>();
+
     /**
      * Default constructor for JPA.
      */
-    public User(){}
+    public User() {
+    }
 
     /**
      * Constructs a new User with the specified credentials.
      * Initializes default values for verification status, timestamps, and scores.
      *
-     * @param username the unique username for the user
-     * @param email the unique email address for the user
+     * @param username     the unique username for the user
+     * @param email        the unique email address for the user
      * @param passwordHash the hashed password for authentication
      */
-    public User(String username, String email, String passwordHash){
+    public User(String username, String email, String passwordHash) {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;

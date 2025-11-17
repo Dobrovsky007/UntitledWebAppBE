@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.User;
 import com.webapp.Eventified.dto.user.EventDetailsDTO;
 import com.webapp.Eventified.dto.user.EventParticipantDTO;
 import com.webapp.Eventified.dto.user.EventPoolDTO;
 import com.webapp.Eventified.dto.user.EventUpdateRequest;
+import com.webapp.Eventified.model.Event;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;

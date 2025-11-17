@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.EventParticipant;
-import com.webapp.Eventified.domain.id.EventParticipantId;
+import com.webapp.Eventified.model.Event;
+import com.webapp.Eventified.model.EventParticipant;
+import com.webapp.Eventified.model.id.EventParticipantId;
 
 /**
  * Repository interface for EventParticipant entity operations.

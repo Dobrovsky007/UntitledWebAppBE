@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.webapp.Eventified.domain.SportUser;
-import com.webapp.Eventified.domain.id.SportUserId;
+import com.webapp.Eventified.model.SportUser;
+import com.webapp.Eventified.model.id.SportUserId;
 
 /**
  * Repository interface for SportUser entity operations.

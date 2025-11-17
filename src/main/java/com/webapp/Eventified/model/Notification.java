@@ -1,4 +1,4 @@
-package com.webapp.Eventified.domain;
+package com.webapp.Eventified.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

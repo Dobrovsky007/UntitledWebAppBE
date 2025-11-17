@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 
-import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.model.User;
 
 /**
  * Repository interface for User entity operations.

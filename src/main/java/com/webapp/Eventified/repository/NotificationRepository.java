@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.webapp.Eventified.domain.Notification;
+import com.webapp.Eventified.model.Notification;
 
 /**
  * Repository interface for Notification entity operations.

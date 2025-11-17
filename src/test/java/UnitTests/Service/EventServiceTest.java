@@ -3,8 +3,8 @@ package UnitTests.Service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.model.Event;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.EventRepository;
 import com.webapp.Eventified.repository.UserRepository;

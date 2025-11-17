@@ -8,9 +8,9 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.SportUser;
-import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.model.Event;
+import com.webapp.Eventified.model.SportUser;
+import com.webapp.Eventified.model.User;
 
 import lombok.extern.slf4j.Slf4j;
 

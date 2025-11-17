@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.webapp.Eventified.domain.Event;
-import com.webapp.Eventified.domain.EventParticipant;
-import com.webapp.Eventified.domain.Notification;
-import com.webapp.Eventified.domain.SportUser;
-import com.webapp.Eventified.domain.User;
+import com.webapp.Eventified.model.Event;
+import com.webapp.Eventified.model.EventParticipant;
+import com.webapp.Eventified.model.Notification;
+import com.webapp.Eventified.model.SportUser;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.repository.NotificationRepository;
 import com.webapp.Eventified.repository.SportUserRepository;

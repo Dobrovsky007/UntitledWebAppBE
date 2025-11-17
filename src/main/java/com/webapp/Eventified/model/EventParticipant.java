@@ -1,9 +1,9 @@
-package com.webapp.Eventified.domain;
+package com.webapp.Eventified.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.webapp.Eventified.domain.id.EventParticipantId;
+import com.webapp.Eventified.model.id.EventParticipantId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
