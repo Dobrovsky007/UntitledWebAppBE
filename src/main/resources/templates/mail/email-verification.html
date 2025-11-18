@@ -4,74 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Verification - Eventified</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .header {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        .btn {
-            display: inline-block;
-            background-color: #3498db;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        .btn:hover {
-            background-color: #2980b9;
-        }
-        .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            font-size: 12px;
-            color: #666;
-        }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Welcome to Eventified!</h1>
+<body style="
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 40px 0;
+">
+
+    <div style="
+        max-width: 420px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 32px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        text-align: center;
+    ">
+
+        <h1 style="
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1d23;
+        ">Welcome to Eventified</h1>
+
+        <p style="
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #555;
+            font-size: 14px;
+        ">
+            Verify your email to activate your account
+        </p>
+
+        <h2 style="font-size: 18px; color: #1a1d23;">
+            Hi <span th:text="${username}">Username</span>!
+        </h2>
+
+        <p style="font-size: 14px; color: #444;">
+            Click the button below to verify your email and complete your registration.
+        </p>
+
+        <div style="margin: 30px 0;">
+            <a th:href="${verificationUrl}" style="
+                background-color: #0a3d62;
+                color: #ffffff !important;
+                padding: 12px 28px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                display: inline-block;
+            ">
+                Verify Email
+            </a>
         </div>
-        
-        <h2>Hi <span th:text="${username}">Username</span>!</h2>
-        
-        <p>Thank you for registering with Eventified. To complete your registration and start organizing or joining events, please verify your email address by clicking the button below:</p>
-        
-        <div style="text-align: center;">
-            <a th:href="${verificationUrl}" class="btn">Verify Email Address</a>
-        </div>
-        
-        <p>If the button above doesn't work, copy and paste the following link into your browser:</p>
-        <p style="word-break: break-all; background-color: #f8f9fa; padding: 10px; border-radius: 5px;">
+
+        <p style="font-size: 12px; color: #777;">
+            If the button doesn't work, copy this link:
+        </p>
+
+        <p style="
+            font-size: 12px;
+            word-break: break-all;
+            background: #f0f2f5;
+            padding: 10px;
+            border-radius: 6px;
+        ">
             <span th:text="${verificationUrl}">Verification Link</span>
         </p>
-        
-        <p><strong>Important:</strong> This verification link will expire in 48 hours for security reasons.</p>
-        
-        <div class="footer">
-            <p>If you didn't create an account with Eventified, please ignore this email.</p>
-            <p>© 2025 Eventified. All rights reserved.</p>
-        </div>
+
+        <p style="font-size: 12px; color: #777; margin-top: 30px;">
+            This link expires in 48 hours.
+        </p>
+
+        <p style="font-size: 11px; color: #aaa; margin-top: 30px;">
+            If you didn’t create an account, you can ignore this email.
+        </p>
+
+        <p style="font-size: 11px; color: #aaa; margin-top: 10px;">
+            © 2025 Eventified. All rights reserved.
+        </p>
     </div>
+
 </body>
 </html>
