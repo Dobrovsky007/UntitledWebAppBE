@@ -5,10 +5,13 @@ import com.webapp.Eventified.dto.user.RegisterRequest;
 import com.webapp.Eventified.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * REST controller for authentication-related endpoints.
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
 
@@ -27,7 +30,7 @@ public class AuthController {
      *
      * @param authService the service layer for authentication-related operations
      */
-    public AuthController(AuthService authService){
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -35,19 +38,33 @@ public class AuthController {
      * Registers a new user in the system.
      * Validates that the username and email are unique before creating the account.
      *
-     * @param request the registration request containing username, email, and password
-     * @return ResponseEntity with HTTP 201 (Created) and success message if registration succeeds,
+     * @param request the registration request containing username, email, and
+     *                password
+     * @return ResponseEntity with HTTP 201 (Created) and success message if
+     *         registration succeeds,
      *         or HTTP 400 (Bad Request) with error message if validation fails
      */
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request){
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
         try {
             authService.registerUser(request.getUsername(), request.getEmail(), request.getPassword());
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/verify")
+    public ModelAndView verifyEmail(@RequestParam("token") String token) {
+        try {
+            boolean verified = authService.verifyUser(token);
+            if (verified) {
+                ModelAndView mav = new ModelAndView("mail/registration-successful");
+                return mav;
+            }
+        } catch (Exception e) {
+        }
+        return new ModelAndView("error");
     }
 
     /**
@@ -59,7 +76,7 @@ public class AuthController {
      *         or an error response if credentials are invalid
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request){
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 }

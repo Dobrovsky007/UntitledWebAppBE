@@ -1,6 +1,20 @@
 spring:
   profiles:
     active: dev
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "noreply.eventifyteam@gmail.com"
+    password: "xvqwnybieoqyzcto"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enabled: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
 
 # Default logging configuration
 logging:
@@ -13,7 +27,3 @@ app:
   security:
     enabled: true  # This will be overridden by profiles
 
-# API base path
-server:
-  servlet:
-    context-path: /api

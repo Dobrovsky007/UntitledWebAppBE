@@ -27,7 +27,7 @@ class AuthServiceTest {
         authRepository = Mockito.mock(AuthRepository.class);
         passwordEncoder = new BCryptPasswordEncoder();
         jwtutil = Mockito.mock(JWTutil.class);
-        authService = new AuthService(authRepository, passwordEncoder, jwtutil);
+        authService = new AuthService(authRepository, passwordEncoder, jwtutil, null, null, null, null);
     }
 
     @Test

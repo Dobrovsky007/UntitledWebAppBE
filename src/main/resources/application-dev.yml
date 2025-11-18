@@ -11,11 +11,20 @@ spring:
     enabled: true
     locations: classpath:db/migration
     out-of-order: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "noreply.eventifyteam@gmail.com"
+    password: "xvqwnybieoqyzcto"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enabled: true
 
 server:
   port: 8080
-  servlet:
-    context-path: /api
 
 # Development mode - Security disabled for easy backend development
 app:

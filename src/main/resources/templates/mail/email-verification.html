@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - Eventified</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Eventified!</h1>
+        </div>
+        
+        <h2>Hi <span th:text="${username}">Username</span>!</h2>
+        
+        <p>Thank you for registering with Eventified. To complete your registration and start organizing or joining events, please verify your email address by clicking the button below:</p>
+        
+        <div style="text-align: center;">
+            <a th:href="${verificationUrl}" class="btn">Verify Email Address</a>
+        </div>
+        
+        <p>If the button above doesn't work, copy and paste the following link into your browser:</p>
+        <p style="word-break: break-all; background-color: #f8f9fa; padding: 10px; border-radius: 5px;">
+            <span th:text="${verificationUrl}">Verification Link</span>
+        </p>
+        
+        <p><strong>Important:</strong> This verification link will expire in 48 hours for security reasons.</p>
+        
+        <div class="footer">
+            <p>If you didn't create an account with Eventified, please ignore this email.</p>
+            <p>© 2025 Eventified. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
