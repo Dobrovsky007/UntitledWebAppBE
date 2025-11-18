@@ -14,8 +14,6 @@ spring:
 
 server:
   port: 8080
-  servlet:
-    context-path: /api
 
 # Frontend development mode - Security enabled for JWT testing
 app:

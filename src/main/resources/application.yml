@@ -13,7 +13,3 @@ app:
   security:
     enabled: true  # This will be overridden by profiles
 
-# API base path
-server:
-  servlet:
-    context-path: /api
