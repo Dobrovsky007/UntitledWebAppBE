@@ -17,7 +17,7 @@ import com.webapp.Eventified.service.UserService;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminUserController {
 

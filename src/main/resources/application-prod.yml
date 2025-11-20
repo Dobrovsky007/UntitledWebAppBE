@@ -23,7 +23,8 @@ spring:
 
 server:
   port: 8080
-
+  servlet:
+    context-path: /api
 # Application configuration
 app:
   base-url: "https://cloud.kosickaakademia.sk:8443/eventified"
