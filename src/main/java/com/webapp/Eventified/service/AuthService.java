@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Value("http://localhost:8080")
+    @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
     private final AuthRepository authRepository;

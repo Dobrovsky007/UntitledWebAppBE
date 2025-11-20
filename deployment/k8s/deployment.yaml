@@ -33,7 +33,7 @@ spec:
               name: http
           livenessProbe:
             httpGet:
-              path: /actuator/health
+              path: /api/actuator/health
               port: 8080
             initialDelaySeconds: 300  # Increased from 120 to 5 minutes
             periodSeconds: 30
@@ -41,7 +41,7 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /api/actuator/health
               port: 8080
             initialDelaySeconds: 300  # Increased from 90 to 5 minutes
             periodSeconds: 15

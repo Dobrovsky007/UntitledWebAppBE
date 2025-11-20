@@ -26,8 +26,9 @@ server:
   servlet:
     context-path: /api
 
-# Production mode - Security enabled with JWT
+# Application configuration
 app:
+  base-url: "https://cloud.kosickaakademia.sk:8443/eventified"
   security:
     enabled: true
 

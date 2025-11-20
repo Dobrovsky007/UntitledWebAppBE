@@ -12,6 +12,12 @@ data:
   # Server Configuration
   SERVER_PORT: "8080"
   
+  # App Configuration
+  APP_BASE_URL: "https://cloud.kosickaakademia.sk:8443/eventified"
+  
+  # Mail Configuration (set your actual values in secrets)
+  MAIL_USERNAME: "noreply.eventifyteam@gmail.com"
+  
   # Actuator Configuration
   MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info"
   MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "when-authorized"
