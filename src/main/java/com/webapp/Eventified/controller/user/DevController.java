@@ -18,7 +18,7 @@ import java.util.Map;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/api/dev")
+@RequestMapping("/dev")
 @ConditionalOnProperty(name = "app.security.enabled", havingValue = "false")
 public class DevController {
 
