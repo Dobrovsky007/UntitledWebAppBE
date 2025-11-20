@@ -29,7 +29,7 @@ import com.webapp.Eventified.service.EventService;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/event")
+@RequestMapping("/api/event")
 public class EventController {
 
     private final EventService eventService;

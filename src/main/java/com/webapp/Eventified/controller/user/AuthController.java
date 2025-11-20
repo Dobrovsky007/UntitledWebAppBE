@@ -21,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
 
