@@ -66,7 +66,7 @@ public class AuthService {
 
         User user = new User(username, email, hashedPassword);
         User savedUser = authRepository.save(user);
-
+/* 
         try {
             sendRegistrationEmail(savedUser);
             System.out.println("Verification email sent successfully");
@@ -74,7 +74,7 @@ public class AuthService {
             System.out.println("Could not send verification email: " + e.getMessage());
             System.out.println("User registered successfully but email verification is disabled");
         }
-
+*/
         return savedUser;
     }
 
@@ -125,11 +125,11 @@ public class AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
-
+/* 
         if (!user.isVerified()) {
             throw new IllegalArgumentException("Please verify your email before logging in");
         }
-
+*/
         String token = jwtutil.generateToken(user.getUsername());
         return new LoginResponse(token);
     }
