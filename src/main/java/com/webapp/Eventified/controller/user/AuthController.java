@@ -60,6 +60,7 @@ public class AuthController {
             boolean verified = authService.verifyUser(token);
             if (verified) {
                 ModelAndView mav = new ModelAndView("mail/registration-successful");
+                mav.addObject("loginUrl", "https://cloud.kosickaakademia.sk:8443/eventified");
                 return mav;
             }
         } catch (Exception e) {
