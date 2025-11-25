@@ -68,6 +68,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SecureTokenEmail> tokens = new HashSet<>();
 
+    @OneToMany(mappedBy = "requester", cascade = CascadeType.ALL)
+    private Set<Friendship> sentFriendRequests = new HashSet<>();
+
+    @OneToMany(mappedBy = "addressee", cascade = CascadeType.ALL)
+    private Set<Friendship> receivedFriendRequests = new HashSet<>();
+
     /**
      * Default constructor for JPA.
      */

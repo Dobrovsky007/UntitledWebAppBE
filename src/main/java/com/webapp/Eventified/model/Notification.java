@@ -50,18 +50,12 @@ public class Notification {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "user_id", nullable = false, insertable = false, updatable = false)
-    private UUID userId;
-
-    @Column(name = "event_id", insertable = false, updatable = false)
-    private UUID eventId;
-
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "event_id", insertable = false, nullable = false)
+    @JoinColumn(name = "event_id", nullable = true)
     private Event event;
 
     /**
@@ -81,10 +75,10 @@ public class Notification {
      * @param title the title/subject of the notification
      * @param messageOfNotification the detailed message content of the notification
      */
-    public Notification(UUID userId, UUID eventId, Integer typeOfNotification, String title,
+    public Notification(User user, Event event, Integer typeOfNotification, String title,
             String messageOfNotification) {
-        this.userId = userId;
-        this.eventId = eventId;
+        this.user = user;
+        this.event = event;
         this.typeOfNotification = typeOfNotification;
         this.title = title;
         this.messageOfNotification = messageOfNotification;

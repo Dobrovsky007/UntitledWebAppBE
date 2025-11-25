@@ -40,6 +40,7 @@ public class NotificationService {
     private final Integer NEW_PLAYER_JOINED = 5;
     private final Integer EVENT_UPDATE = 6;
     private final Integer PLAYER_LEFT = 7;
+    private final Integer FRIEND_REQUEST = 8;
 
     /**
      * Notifies users about a new event that matches their sport and skill level preferences.
@@ -54,8 +55,8 @@ public class NotificationService {
 
         for (SportUser sportUser : interestedUsers) {
             if (!sportUser.getUserId().equals(event.getOrganizer().getId())) {
-                createSaveNotification(sportUser.getUserId(),
-                        event.getId(),
+                createSaveNotification(sportUser.getUser(),
+                        event,
                         NEW_EVENT_RECOMMENDATION,
                         "New Event",
                         "There was new event added you might be interested in");
@@ -70,12 +71,12 @@ public class NotificationService {
      * @param eventId the unique identifier of the cancelled event
      * @return true if notifications were successfully sent
      */
-    public boolean notifyEventCancelled(UUID eventId) {
-        List<EventParticipant> participants = eventParticipantRepository.findByEventId(eventId);
+    public boolean notifyEventCancelled(Event event) {
+        List<EventParticipant> participants = eventParticipantRepository.findByEventId(event.getId());
 
         for (EventParticipant participant : participants) {
-            createSaveNotification(participant.getUserId(),
-                    eventId,
+            createSaveNotification(participant.getUser(),
+                    event,
                     EVENT_CANCELLED,
                     "Event Cancelled",
                     "An event you were participating in has been cancelled");
@@ -90,9 +91,9 @@ public class NotificationService {
      * @param organizerId the unique identifier of the event organizer
      * @return true if notification was successfully sent
      */
-    public boolean notifyRateParticipants(UUID eventId, UUID organizerId) {
-            createSaveNotification(organizerId,
-                    eventId,
+    public boolean notifyRateParticipants(Event event, User organizer) {
+            createSaveNotification(organizer,
+                    event,
                     RATE_PARTICIPANTS,
                     "Rate Participants",
                     "Please rate the participants of the event you attended");
@@ -106,12 +107,12 @@ public class NotificationService {
      * @param eventId the unique identifier of the event
      * @return true if notifications were successfully sent
      */
-    public boolean notifyEventReminder(UUID eventId) {
-        List<EventParticipant> participants = eventParticipantRepository.findByEventId(eventId);
+    public boolean notifyEventReminder(Event event) {
+        List<EventParticipant> participants = eventParticipantRepository.findByEventId(event.getId());
 
         for (EventParticipant participant : participants) {
-            createSaveNotification(participant.getUserId(),
-                    eventId,
+            createSaveNotification(participant.getUser(),
+                    event,
                     EVENT_REMINDER,
                     "Event Reminder",
                     "This is a reminder for the event you are participating in");
@@ -127,10 +128,10 @@ public class NotificationService {
      * @param playerUsername the username of the player who joined
      * @return true if notification was successfully sent
      */
-    public boolean notifyNewPlayerJoined(UUID eventId, UUID organizerId, String playerUsername) {
+    public boolean notifyNewPlayerJoined(Event event, User organizer, String playerUsername) {
 
-        createSaveNotification(organizerId,
-                eventId,
+        createSaveNotification(organizer,
+                event,
                 NEW_PLAYER_JOINED,
                 "New Player Joined",
                 playerUsername + " has joined the event you are participating in");
@@ -144,12 +145,12 @@ public class NotificationService {
      * @param eventId the unique identifier of the updated event
      * @return true if notifications were successfully sent
      */
-    public boolean notifyEventUpdate(UUID eventId) {
-        List<EventParticipant> participants = eventParticipantRepository.findByEventId(eventId);
+    public boolean notifyEventUpdate(Event event) {
+        List<EventParticipant> participants = eventParticipantRepository.findByEventId(event.getId());
 
         for (EventParticipant participant : participants) {
-            createSaveNotification(participant.getUserId(),
-                    eventId,
+            createSaveNotification(participant.getUser(),
+                    event,
                     EVENT_UPDATE,
                     "Event Updated",
                     "An event you are participating in has been updated");
@@ -165,16 +166,25 @@ public class NotificationService {
      * @param playerUsername the username of the player who left
      * @return true if notification was successfully sent
      */
-    public boolean notifyPlayerLeft(UUID eventId, UUID organizerId, String playerUsername) {
+    public boolean notifyPlayerLeft(Event event, User organizer, String playerUsername) {
 
-        createSaveNotification(organizerId,
-                eventId,
+        createSaveNotification(organizer,
+                event,
                 PLAYER_LEFT,
                 "Player Left",
                 playerUsername + " has left the event you are participating in");
 
         return true;
 
+    }
+
+    public boolean notifyFriendRequest(User receiver, String senderUsername){
+
+        createSaveNotification(receiver, null, FRIEND_REQUEST,
+                "New Friend Request",
+                "You have new friend request from " + senderUsername);
+
+        return true;
     }
 
     /**
@@ -187,8 +197,8 @@ public class NotificationService {
      * @param title the title/subject of the notification
      * @param messageOfNotification the detailed message content
      */
-    private void createSaveNotification(UUID userId, UUID eventId, Integer typeOfNotification, String title, String messageOfNotification) {
-        Notification notification = new Notification(userId, eventId, typeOfNotification, title,
+    private void createSaveNotification(User user, Event event, Integer typeOfNotification, String title, String messageOfNotification) {
+        Notification notification = new Notification(user, event, typeOfNotification, title,
                 messageOfNotification);
         notificationRepository.save(notification);
     }

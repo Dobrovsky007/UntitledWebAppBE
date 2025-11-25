@@ -306,7 +306,7 @@ public class EventService {
                 if (event.getOrganizer().getId().equals(user.getId())) {
                         event.setStatusOfEvent(3);
                         eventRepository.save(event);
-                        notificationService.notifyEventCancelled(eventId);
+                        notificationService.notifyEventCancelled(event);
                         return true;
                 } else {
                         throw new IllegalArgumentException("You are not the organizer of this event.");
@@ -329,7 +329,7 @@ public class EventService {
 
                         eventRepository.save(event);
 
-                        notificationService.notifyEventUpdate(eventId);
+                        notificationService.notifyEventUpdate(event);
 
                         return true;
                 } else {

@@ -148,7 +148,7 @@ public class UserService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
 
-        notificationService.notifyNewPlayerJoined(eventId, event.getOrganizer().getId(), username);
+        notificationService.notifyNewPlayerJoined(event, event.getOrganizer(), username);
 
         return true;
     }
@@ -163,8 +163,11 @@ public class UserService {
         User organizer = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"))
                 .getOrganizer();
+        
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
 
-        notificationService.notifyPlayerLeft(eventId, organizer.getId(), username);
+        notificationService.notifyPlayerLeft(event, organizer, username);
         eventParticipantRepository.delete(participant);
         return true;
     }

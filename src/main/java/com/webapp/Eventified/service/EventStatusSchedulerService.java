@@ -69,7 +69,7 @@ public class EventStatusSchedulerService {
 
         for(Event event : eventsToRemind){
             if (!event.getReminderSent()) {
-                 notificationService.notifyEventReminder(event.getId());
+                 notificationService.notifyEventReminder(event);
                  event.setReminderSent(true);
                  eventRepository.save(event);
             }
@@ -92,7 +92,7 @@ public class EventStatusSchedulerService {
 
         for(Event event : eventsToBeRated){
             if(!event.getRated()){
-                notificationService.notifyRateParticipants(event.getId(), event.getOrganizer().getId());
+                notificationService.notifyRateParticipants(event, event.getOrganizer());
                 event.setRated(true);
                 eventRepository.save(event);
             }
