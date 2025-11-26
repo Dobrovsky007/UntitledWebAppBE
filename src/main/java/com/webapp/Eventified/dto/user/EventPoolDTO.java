@@ -1,6 +1,7 @@
 package com.webapp.Eventified.dto.user;
 
 
+import java.util.UUID;
 import com.webapp.Eventified.model.Event;
 
 import lombok.Data;
@@ -14,6 +15,7 @@ import lombok.Data;
  */
 @Data
 public class EventPoolDTO {
+    private UUID id;
     private String title;
     private Integer sport;
     private String address;
@@ -28,6 +30,7 @@ public class EventPoolDTO {
      * @param event the Event entity to convert
      */
     public EventPoolDTO(Event event) {
+        this.id = event.getId();
         this.title = event.getTitle();
         this.sport = event.getSport();
         this.address = event.getAddress();
