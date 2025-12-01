@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verified - Eventify</title>
+</head>
+<body style="
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 40px 0;
+">
+
+    <div style="
+        max-width: 420px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 32px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        text-align: center;
+    ">
+
+        <h1 style="
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1d23;
+            margin-bottom: 10px;
+        ">
+            Email Verified
+        </h1>
+
+        <p style="font-size: 14px; color: #444; margin-bottom: 30px;">
+            Your email has been successfully verified. You can now log in and start using Eventify.
+        </p>
+
+        <a th:href="${loginUrl}" style="
+            background-color: #0a3d62;
+            color: #ffffff !important;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+        ">
+            Go to Login
+        </a>
+
+    </div>
+
+</body>
+</html>

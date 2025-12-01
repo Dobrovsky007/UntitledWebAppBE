@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eventified-backend-config
+  namespace: eventified
+data:
+  # Application Configuration (non-sensitive)
+  SPRING_PROFILES_ACTIVE: "prod"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "validate"
+  SPRING_JPA_SHOW_SQL: "false"
+  
+  # Server Configuration
+  SERVER_PORT: "8080"
+  
+  # App Configuration
+  APP_BASE_URL: "https://cloud.kosickaakademia.sk:8443/eventified"
+  
+  # Mail Configuration (set your actual values in secrets)
+  MAIL_USERNAME: "noreply.eventifyteam@gmail.com"
+  
+  # Actuator Configuration
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info"
+  MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "when-authorized"
+  
+  # JVM Optimization for faster startup
+  JAVA_OPTS: "-Xms1g -Xmx1g -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+OptimizeStringConcat -Djava.security.egd=file:/dev/./urandom"
