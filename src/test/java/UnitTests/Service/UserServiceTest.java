@@ -13,8 +13,8 @@ import com.webapp.Eventified.repository.UserRepository;
 import com.webapp.Eventified.repository.EventParticipantRepository;
 import com.webapp.Eventified.service.NotificationService;
 import com.webapp.Eventified.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
 
 import java.util.*;
 import java.util.UUID;
@@ -28,17 +28,15 @@ class UserServiceTest {
     private UserService userService;
     private SportUserRepository sportUserRepository;
     private EventRepository eventRepository;
-    private final NotificationService notificationService;
+    private NotificationService notificationService;
 
-  UserServiceTest(NotificationService notificationService) {
-    this.notificationService = notificationService;
-  }
-
-
-  @BeforeEach
+    @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         eventParticipantRepository = mock(EventParticipantRepository.class);
+        sportUserRepository = mock(SportUserRepository.class);
+        eventRepository = mock(EventRepository.class);
+        notificationService = mock(NotificationService.class);
         userService = new UserService(userRepository, eventParticipantRepository, sportUserRepository, eventRepository, notificationService);
     }
 
@@ -153,5 +151,11 @@ class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> userService.deleteUser(username));
+    }
+
+    @Test
+    @DisplayName("Should successfully delete user from event")
+    void leaveEvent_success() {
+        
     }
 }
