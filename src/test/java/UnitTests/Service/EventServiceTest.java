@@ -22,18 +22,15 @@ class EventServiceTest {
     private EventRepository eventRepository;
     private UserRepository userRepository;
     private EventParticipantRepository eventParticipantRepository;
-    private final NotificationService notificationService;
+    private NotificationService notificationService;
     private EventService eventService;
 
-  EventServiceTest(NotificationService notificationService) {
-    this.notificationService = notificationService;
-  }
-
-  @BeforeEach
+    @BeforeEach
     void setUp() {
         eventRepository = mock(EventRepository.class);
         userRepository = mock(UserRepository.class);
         eventParticipantRepository = mock(EventParticipantRepository.class);
+        notificationService = mock(NotificationService.class);
         eventService = new EventService(eventRepository, userRepository, eventParticipantRepository, notificationService);
     }
 
