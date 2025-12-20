@@ -156,6 +156,25 @@ class UserServiceTest {
     @Test
     @DisplayName("Should successfully delete user from event")
     void leaveEvent_success() {
-        
+
+        String username = "testUser";
+        UUID eventId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+
+        User user = new User();
+        user.setId(userId);
+
+        EventParticipant eventParticipant = new EventParticipant(userId, eventId);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(eventParticipantRepository.findByUserIdAndEventId(userId,eventId)).thenReturn(Optional.of(eventParticipant));
+
+        boolean result = userService.leaveEvent(username, eventId);
+
+        assertTrue(result);
+
+        verify(userRepository).findByUsername(username);
+        verify(eventParticipantRepository).findByUserIdAndEventId(userId, eventId);
+        verify(eventParticipantRepository).delete(eventParticipant);
     }
 }
