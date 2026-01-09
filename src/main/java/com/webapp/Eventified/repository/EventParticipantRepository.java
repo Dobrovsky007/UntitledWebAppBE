@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.webapp.Eventified.model.Event;
 import com.webapp.Eventified.model.EventParticipant;
+import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.model.id.EventParticipantId;
 
 /**
@@ -42,4 +43,5 @@ public interface EventParticipantRepository extends JpaRepository<EventParticipa
            "AND e.endTime < :now " +
            "ORDER BY e.startTime DESC")
     List<Event> findPastEventsByUserId(@Param("userID")UUID userId, @Param("now") LocalDateTime now);
+       Optional<EventParticipant> findByEventIdAndUserId(UUID eventId, UUID userId);
 }

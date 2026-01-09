@@ -40,6 +40,8 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     List<Event> findEventByStatusOfEventAndStartTime(int i, LocalDateTime reminderTime);
     List<Event> findEventByStatusOfEventAndEndTime(Integer statusPast, LocalDateTime ratingReminderTime);
 
+       List<Event> findByStatusOfEventAndEndTimeBeforeAndRatedFalse(Integer statusOfEvent, LocalDateTime now);
+
      @Query("SELECT e FROM Event e WHERE e.startTime > :now " +
            "AND e.statusOfEvent = 0 " +
            "AND e.id NOT IN (SELECT ep.eventId FROM EventParticipant ep WHERE ep.userId = :userId)")
@@ -52,4 +54,10 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
     @Query("SELECT e FROM Event e WHERE e.skillLevel BETWEEN :minSkill AND :maxSkill " +
            "AND e.startTime > :now AND e.statusOfEvent = 0")
     List<Event> findEventsBySkillRange(@Param("minSkill") Integer minSkill, @Param("maxSkill") Integer maxSkill, @Param("now") LocalDateTime now);
+
+    @Query("select e from Event e where e.endTime < :now and e.statusOfEvent = :pastStatus and e.rated = false")
+       List<Event> findEndedEventsNeedingRatingPrompt(
+      @Param("now") LocalDateTime now,
+      @Param("pastStatus") Integer pastStatus
+  );
 }
