@@ -21,6 +21,7 @@ public class EventPoolDTO {
     private String address;
     private String startTime;
     private Integer capacity;
+    private Integer occupied;
     private Integer skillLevel;
 
     /**
@@ -36,6 +37,7 @@ public class EventPoolDTO {
         this.address = event.getAddress();
         this.startTime = event.getStartTime().toString();
         this.capacity = event.getCapacity();
+        this.occupied = event.getOccupied();
         this.skillLevel = event.getSkillLevel();
     }
 }
