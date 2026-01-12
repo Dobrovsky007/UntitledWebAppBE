@@ -96,16 +96,12 @@ public class EventController {
      * Filters events where the start time is after the current timestamp.
      *
      * @param authentication the Spring Security authentication object containing user credentials
-     * @return ResponseEntity containing upcoming events or error message if none found
+     * @return ResponseEntity containing upcoming events or empty array if none found
      */
     @GetMapping("/hosted/upcoming")
     public ResponseEntity<?> getAllMyUpcomingEvents(Authentication authentication){
         String username = authentication.getName();
-        if (eventService.getHostedEventsUpcoming(username).isEmpty()){
-            return ResponseEntity.status(500).body("No upcoming events found");
-        } else {
-            return ResponseEntity.ok(eventService.getHostedEventsUpcoming(username));
-        }
+        return ResponseEntity.ok(eventService.getHostedEventsUpcoming(username));
     }
 
     /**
@@ -113,18 +109,12 @@ public class EventController {
      * Filters events where the end time is before the current timestamp.
      *
      * @param authentication the Spring Security authentication object containing user credentials
-     * @return ResponseEntity containing past events or error message if none found
+     * @return ResponseEntity containing past events or empty array if none found
      */
     @GetMapping("/hosted/past")
     public ResponseEntity<?> getAllMyPastEvents(Authentication authentication){
         String username = authentication.getName();
-
-        if (eventService.getHostedEventsPast(username).isEmpty()){
-            return ResponseEntity.status(500).body("No past events found");
-        } else {
-            return ResponseEntity.ok(eventService.getHostedEventsPast(username));
-        }
-
+        return ResponseEntity.ok(eventService.getHostedEventsPast(username));
     }
 
     /**
@@ -232,43 +222,36 @@ public class EventController {
             @RequestParam (required = false) Integer freeSlots){
 
         try {
+            System.out.println("=== Filter endpoint called ===");
+            System.out.println("Sports param: " + sports);
+            System.out.println("Skill Levels param: " + skillLevels);
+            System.out.println("Start Time After: " + startTimeAfter);
+            System.out.println("End Time Before: " + endTimeBefore);
+            System.out.println("Free Slots: " + freeSlots);
+            
             LocalDateTime startTimeAfterParsed = startTimeAfter != null ? LocalDateTime.parse(startTimeAfter) : null;
             LocalDateTime endTimeBeforeParsed = endTimeBefore != null ? LocalDateTime.parse(endTimeBefore) : null;
 
             var filteredEvents = eventService.getFilteredEvents(sports, skillLevels, startTimeAfterParsed, endTimeBeforeParsed, freeSlots);
 
-            if(filteredEvents.isEmpty()){
-                return ResponseEntity.status(500).body("No events found with your criteria selected");
-            } else{
-                return ResponseEntity.ok(filteredEvents);
-            }
+            return ResponseEntity.ok(filteredEvents);
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid filtered parameters" + e.getMessage());
+            System.err.println("Error in filter endpoint: " + e.getClass().getName() + " - " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid filter parameters: " + e.getClass().getName() + " - " + e.getMessage());
         }
     }
 
     @GetMapping("/attended/past")
     public ResponseEntity<?> getMyAttendedPastEvents(Authentication authentication){
-
         String username = authentication.getName();
-
-        if (eventService.getMyAttendedPastEvents(username).isEmpty()) {
-            return ResponseEntity.status(500).body("No past attended events found");
-        } else{
-            return ResponseEntity.ok(eventService.getMyAttendedPastEvents(username));
-        }
+        return ResponseEntity.ok(eventService.getMyAttendedPastEvents(username));
     }
 
     @GetMapping("/attended/upcoming")
     public ResponseEntity<?> getMyAttendedUpcomingEvents(Authentication authentication){
-
         String username = authentication.getName();
-
-        if (eventService.getMyAttendedUpcomingEvents(username).isEmpty()) {
-            return ResponseEntity.status(500).body("No upcoming attended events found");
-        } else{
-            return ResponseEntity.ok(eventService.getMyAttendedUpcomingEvents(username));
-        }
+        return ResponseEntity.ok(eventService.getMyAttendedUpcomingEvents(username));
     }
 
     @GetMapping("/details/{eventId}")

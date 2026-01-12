@@ -2,12 +2,14 @@ package com.webapp.Eventified.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.webapp.Eventified.model.Event;
 import com.webapp.Eventified.repository.EventRepository;
+import com.webapp.Eventified.repository.NotificationRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +29,13 @@ public class EventStatusSchedulerService {
 
     private final EventRepository eventRepository;
     private final NotificationService notificationService;
+    private final NotificationRepository notificationRepository;
 
     private static final Integer STATUS_PAST = 2;
     private static final Integer STATUS_ONGOING = 1;
     private static final Integer STATUS_ACTIVE = 0;
+
+    private static final Integer RATE_PARTICIPANTS = 3;
 
     /**
      * Scheduled task that updates event statuses every minute.
@@ -82,19 +87,28 @@ public class EventStatusSchedulerService {
      *
      * @throws Exception if an error occurs during reminder sending
      */
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(cron = "0 */5 * * * *")
     @Transactional
     public void sendRatingReminders() throws Exception{
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime ratingReminderTime = now.minusMinutes(30);
 
-        List<Event> eventsToBeRated = eventRepository.findEventByStatusOfEventAndEndTime(STATUS_PAST, ratingReminderTime);
+        List<Event> eventsToBeRated = eventRepository.findByStatusOfEventAndEndTimeBeforeAndRatedFalse(STATUS_PAST, ratingReminderTime);
 
         for(Event event : eventsToBeRated){
-            if(!event.getRated()){
+            UUID organizerId = event.getOrganizer() != null ? event.getOrganizer().getId() : null;
+            UUID eventId = event.getId();
+            if (organizerId == null || eventId == null) {
+                continue;
+            }
+
+            boolean alreadyPrompted = notificationRepository.existsByUser_IdAndEvent_IdAndTypeOfNotification(
+                    organizerId,
+                    eventId,
+                    RATE_PARTICIPANTS);
+
+            if (!alreadyPrompted) {
                 notificationService.notifyRateParticipants(event, event.getOrganizer());
-                event.setRated(true);
-                eventRepository.save(event);
             }
         }
     }

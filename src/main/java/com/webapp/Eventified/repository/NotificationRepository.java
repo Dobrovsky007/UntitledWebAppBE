@@ -49,5 +49,7 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
      * @return List of all notifications for the user
      */
     List<Notification> findByUserId(UUID id);
+
+    boolean existsByUser_IdAndEvent_IdAndTypeOfNotification(UUID userId, UUID eventId, Integer typeOfNotification);
     
 }
