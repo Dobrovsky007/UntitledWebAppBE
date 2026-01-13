@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.webapp.Eventified.dto.admin.UserInfoAdmin;
+import com.webapp.Eventified.dto.user.SportDTO;
 import com.webapp.Eventified.dto.user.UserProfileDTO;
 import com.webapp.Eventified.model.EventParticipant;
 import com.webapp.Eventified.model.SportUser;
@@ -40,7 +42,9 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("getOtherUserInfo: success")
     void getOtherUserInfo_success() {
+        // Arrange
         UUID userId = UUID.randomUUID();
         User user = new User();
         user.setUsername("testuser");
@@ -50,24 +54,39 @@ class UserServiceTest {
         user.setSports(new HashSet<>(Arrays.asList(new SportUser())));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
+        // Act
         UserProfileDTO dto = userService.getOtherUserInfo(userId);
 
-        assertEquals("testuser", dto.getUsername());
-        assertEquals(5.0f, dto.getRating());
-        assertTrue(dto.isVerified());
-        assertNotNull(dto.getSports());
+        // Assert
+        assertAll(
+                () -> assertEquals("testuser", dto.getUsername()),
+                () -> assertEquals(5.0f, dto.getRating()),
+                () -> assertTrue(dto.isVerified()),
+                () -> assertNotNull(dto.getSports())
+        );
+
+        // Verify
+        verify(userRepository).findById(userId);
     }
 
     @Test
+    @DisplayName("getOtherUserInfo: user not found throws")
     void getOtherUserInfo_userNotFound_throwsException() {
+        // Arrange
         UUID userId = UUID.randomUUID();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
+        // Act + Assert
         assertThrows(IllegalAccessError.class, () -> userService.getOtherUserInfo(userId));
+
+        // Verify
+        verify(userRepository).findById(userId);
     }
 
     @Test
+    @DisplayName("getUserInfoByUsername: success")
     void getUserInfoByUsername_success() {
+        // Arrange
         String username = "testuser";
         User user = new User();
         user.setUsername(username);
@@ -77,24 +96,39 @@ class UserServiceTest {
         user.setSports(new HashSet<>(Arrays.asList(new SportUser())));
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
+        // Act
         UserProfileDTO dto = userService.getUserInfoByUsername(username);
 
-        assertEquals(username, dto.getUsername());
-        assertEquals(5.0f, dto.getRating());
-        assertFalse(dto.isVerified());
-        assertNotNull(dto.getSports());
+        // Assert
+        assertAll(
+                () -> assertEquals(username, dto.getUsername()),
+                () -> assertEquals(5.0f, dto.getRating()),
+                () -> assertFalse(dto.isVerified()),
+                () -> assertNotNull(dto.getSports())
+        );
+
+        // Verify
+        verify(userRepository).findByUsername(username);
     }
 
     @Test
+    @DisplayName("getUserInfoByUsername: user not found throws")
     void getUserInfoByUsername_userNotFound_throwsException() {
+        // Arrange
         String username = "unknown";
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
+        // Act + Assert
         assertThrows(IllegalAccessError.class, () -> userService.getUserInfoByUsername(username));
+
+        // Verify
+        verify(userRepository).findByUsername(username);
     }
 
     @Test
+    @DisplayName("joinEvent: success")
     void joinEvent_success() {
+        // Arrange
         String username = "testuser";
         UUID eventId = UUID.randomUUID();
         User user = new User();
@@ -102,10 +136,23 @@ class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
         when(eventParticipantRepository.findByUserIdAndEventId(user.getId(), eventId)).thenReturn(Optional.empty());
 
+        User organizer = new User();
+        organizer.setId(UUID.randomUUID());
+        com.webapp.Eventified.model.Event event = new com.webapp.Eventified.model.Event();
+        event.setOrganizer(organizer);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        // Act
         boolean result = userService.joinEvent(username, eventId);
 
+        // Assert
         assertTrue(result);
+
+        // Verify
+        verify(userRepository).findByUsername(username);
+        verify(eventParticipantRepository).findByUserIdAndEventId(user.getId(), eventId);
         verify(eventParticipantRepository).save(any(EventParticipant.class));
+        verify(eventRepository).findById(eventId);
     }
 
     @Test
