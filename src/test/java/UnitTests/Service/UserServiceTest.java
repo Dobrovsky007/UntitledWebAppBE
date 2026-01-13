@@ -156,16 +156,24 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("joinEvent: user not found throws")
     void joinEvent_userNotFound_throwsException() {
+        // Arrange
         String username = "unknown";
         UUID eventId = UUID.randomUUID();
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> userService.joinEvent(username, eventId));
+
+        // Verify
+        verify(userRepository).findByUsername(username);
     }
 
     @Test
+    @DisplayName("joinEvent: already joined returns false")
     void joinEvent_alreadyJoined_returnsFalse() {
+        // Arrange
         String username = "testuser";
         UUID eventId = UUID.randomUUID();
         User user = new User();
@@ -173,36 +181,55 @@ class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
         when(eventParticipantRepository.findByUserIdAndEventId(user.getId(), eventId)).thenReturn(Optional.of(new EventParticipant()));
 
+        // Act
         boolean result = userService.joinEvent(username, eventId);
 
+        // Assert
         assertFalse(result);
+
+        // Verify
+        verify(userRepository).findByUsername(username);
+        verify(eventParticipantRepository).findByUserIdAndEventId(user.getId(), eventId);
         verify(eventParticipantRepository, never()).save(any(EventParticipant.class));
     }
 
     @Test
+    @DisplayName("deleteUser: success")
     void deleteUser_success() {
+        // Arrange
         String username = "testuser";
         User user = new User();
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
+        // Act
         boolean result = userService.deleteUser(username);
 
+        // Assert
         assertTrue(result);
+
+        // Verify
+        verify(userRepository).findByUsername(username);
         verify(userRepository).delete(user);
     }
 
     @Test
+    @DisplayName("deleteUser: user not found throws")
     void deleteUser_userNotFound_throwsException() {
+        // Arrange
         String username = "unknown";
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> userService.deleteUser(username));
+
+        // Verify
+        verify(userRepository).findByUsername(username);
     }
 
     @Test
     @DisplayName("Should successfully delete user from event")
     void leaveEvent_success() {
-
+        // Arrange
         String username = "testUser";
         UUID eventId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
@@ -215,18 +242,29 @@ class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
         when(eventParticipantRepository.findByUserIdAndEventId(userId,eventId)).thenReturn(Optional.of(eventParticipant));
 
+        com.webapp.Eventified.model.Event event = new com.webapp.Eventified.model.Event();
+        User organizer = new User();
+        organizer.setId(UUID.randomUUID());
+        event.setOrganizer(organizer);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        // Act
         boolean result = userService.leaveEvent(username, eventId);
 
+        // Assert
         assertTrue(result);
 
+        // Verify
         verify(userRepository).findByUsername(username);
         verify(eventParticipantRepository).findByUserIdAndEventId(userId, eventId);
         verify(eventParticipantRepository).delete(eventParticipant);
+        verify(eventRepository, atLeastOnce()).findById(eventId);
     }
 
     @Test
     @DisplayName("Should return exception when user want to leave event but is not participant")
     void leaveEvent_userNotParticipant_throwsException() {
+        // Arrange
         String username = "testUser";
         UUID eventId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
@@ -237,8 +275,10 @@ class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
         when(eventParticipantRepository.findByUserIdAndEventId(userId,eventId)).thenReturn(Optional.empty());
 
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> userService.leaveEvent(username, eventId));
 
+        // Verify
         verify(userRepository).findByUsername(username);
         verify(eventParticipantRepository).findByUserIdAndEventId(userId, eventId);
     }
@@ -246,13 +286,16 @@ class UserServiceTest {
     @Test
     @DisplayName("Should return exception when user want to leave event but user not found")
     void leaveEvent_userNotFound_throwsException(){
+        // Arrange
         String username = "testUser";
         UUID eventId = UUID.randomUUID();
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> userService.leaveEvent(username, eventId));
 
+        // Verify
         verify(userRepository).findByUsername(username);
         verify(eventParticipantRepository, never()).findByUserIdAndEventId(any(), any());
     }
@@ -260,30 +303,41 @@ class UserServiceTest {
     @Test
     @DisplayName("Should add preferred sport to user successfully")
     void addPreferredSport_success(){
+        // Arrange
         String username = "testUser";
         Integer sportId = 1;
         User user = new User();
-        user.setSports(new HashSet<>());
+        user.setId(UUID.randomUUID());
         
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-        when(sportUserRepository.findById(any())).thenReturn(Optional.of(new SportUser()));
+        when(sportUserRepository.save(any(SportUser.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
+        // Act
         SportUser result = userService.addPreferredSport(username, sportId, 1);
 
-        assertNotNull(result);
-        assertEquals(1, user.getSports().size());
-        verify(userRepository).save(user);
+        // Assert
+        assertAll(
+            () -> assertNotNull(result),
+            () -> assertEquals(sportId, result.getSport()),
+            () -> assertEquals(1, result.getSkillLevel())
+        );
+
+        // Verify
+        verify(userRepository).findByUsername(username);
+        verify(sportUserRepository).save(any(SportUser.class));
     }
 
     @Test
     @DisplayName("Should throw exception when adding preferred sport to user but user not found")
     void addPreferredSport_userNotFound_throwsException(){
+        // Arrange
         String username = "testUser";
         Integer sportId = 1;
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
+        // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> userService.addPreferredSport(username, sportId, 1));
 
         verify(userRepository).findByUsername(username);
