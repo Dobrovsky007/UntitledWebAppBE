@@ -340,8 +340,113 @@ class UserServiceTest {
         // Act + Assert
         assertThrows(IllegalArgumentException.class, () -> userService.addPreferredSport(username, sportId, 1));
 
+        // Verify
         verify(userRepository).findByUsername(username);
-        verify(sportUserRepository, never()).findById(any());
+        verify(sportUserRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("removePreferredSport: success")
+    void removePreferredSport_success() {
+        // Arrange
+        String username = "testUser";
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        user.setId(userId);
+
+        SportDTO sportRequest = new SportDTO();
+        sportRequest.setSport(1);
+
+        SportUser sportUser = new SportUser(userId, 1, 2);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(sportUserRepository.findByUserIdAndSport(userId, 1)).thenReturn(Optional.of(sportUser));
+
+        // Act
+        userService.removePreferredSport(username, sportRequest);
+
+        // Assert
+        // (void method)
+
+        // Verify
+        verify(userRepository).findByUsername(username);
+        verify(sportUserRepository).findByUserIdAndSport(userId, 1);
+        verify(sportUserRepository).delete(sportUser);
+    }
+
+    @Test
+    @DisplayName("removePreferredSport: sport not found throws")
+    void removePreferredSport_sportNotFound_throwsException() {
+        // Arrange
+        String username = "testUser";
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        user.setId(userId);
+
+        SportDTO sportRequest = new SportDTO();
+        sportRequest.setSport(1);
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(sportUserRepository.findByUserIdAndSport(userId, 1)).thenReturn(Optional.empty());
+
+        // Act
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                userService.removePreferredSport(username, sportRequest)
+        );
+
+        // Assert
+        assertEquals("Sport not found for user", exception.getMessage());
+
+        // Verify
+        verify(userRepository).findByUsername(username);
+        verify(sportUserRepository).findByUserIdAndSport(userId, 1);
+        verify(sportUserRepository, never()).delete(any(SportUser.class));
+    }
+
+    @Test
+    @DisplayName("getAllUserInfoAdmin: returns all users")
+    void getAllUserInfoAdmin_returnsAllUsers() {
+        // Arrange
+        User user1 = new User();
+        user1.setId(UUID.randomUUID());
+        user1.setUsername("u1");
+        user1.setEmail("u1@example.com");
+        user1.setVerified(true);
+        user1.setAdmin(false);
+        user1.setTrustScore(10);
+        user1.setNumberOfReviews(2);
+
+        User user2 = new User();
+        user2.setId(UUID.randomUUID());
+        user2.setUsername("u2");
+        user2.setEmail("u2@example.com");
+        user2.setVerified(false);
+        user2.setAdmin(true);
+        user2.setTrustScore(0);
+        user2.setNumberOfReviews(0);
+
+        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+
+        // Act
+        List<UserInfoAdmin> result = userService.getAllUserInfoAdmin();
+
+        // Assert
+        assertAll(
+            () -> assertEquals(2, result.size()),
+            () -> assertEquals("u1", result.get(0).getUsername()),
+            () -> assertEquals("u1@example.com", result.get(0).getEmail()),
+            () -> assertTrue(result.get(0).getIsVerified()),
+            () -> assertFalse(result.get(0).getIsAdmin()),
+            () -> assertEquals(5.0f, result.get(0).getTrustScore()),
+            () -> assertEquals("u2", result.get(1).getUsername()),
+            () -> assertEquals("u2@example.com", result.get(1).getEmail()),
+            () -> assertFalse(result.get(1).getIsVerified()),
+            () -> assertTrue(result.get(1).getIsAdmin()),
+            () -> assertEquals(0.0f, result.get(1).getTrustScore())
+        );
+
+        // Verify
+        verify(userRepository).findAll();
     }
 
 }
