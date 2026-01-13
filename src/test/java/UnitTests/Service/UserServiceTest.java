@@ -229,4 +229,18 @@ class UserServiceTest {
         verify(userRepository).save(user);
     }
 
+    @Test
+    @DisplayName("Should throw exception when adding preferred sport to user but user not found")
+    void addPreferredSport_userNotFound_throwsException(){
+        String username = "testUser";
+        Integer sportId = 1;
+
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> userService.addPreferredSport(username, sportId, 1));
+
+        verify(userRepository).findByUsername(username);
+        verify(sportUserRepository, never()).findById(any());
+    }
+
 }
