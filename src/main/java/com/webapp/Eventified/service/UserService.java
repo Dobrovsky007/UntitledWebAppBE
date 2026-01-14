@@ -160,15 +160,25 @@ public class UserService {
         EventParticipant participant = eventParticipantRepository.findByUserIdAndEventId(user.getId(), eventId)
                 .orElseThrow(() -> new IllegalArgumentException("User is not a participant of the event"));
 
-        User organizer = eventRepository.findById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"))
-                .getOrganizer();
-        
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        
+        User organizer = event.getOrganizer();
 
-        notificationService.notifyPlayerLeft(event, organizer, username);
+        // Delete the participant record
         eventParticipantRepository.delete(participant);
+        
+        // Check if there are any remaining participants
+        List<EventParticipant> remainingParticipants = eventParticipantRepository.findByEventId(eventId);
+        
+        if (remainingParticipants.isEmpty()) {
+            // No participants left, delete the event
+            eventRepository.delete(event);
+        } else {
+            // Notify organizer that player left (only if event still exists)
+            notificationService.notifyPlayerLeft(event, organizer, username);
+        }
+        
         return true;
     }
     /**
