@@ -35,7 +35,7 @@ public class NotificationController {
      * @param authetication the Spring Security authentication object containing user credentials
      * @return ResponseEntity containing all user notifications or error if none found
      */
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getUserNotifications(Authentication authetication){
         String username = authetication.getName();
         if(notificationService.getUserNotifications(username).isEmpty()){
