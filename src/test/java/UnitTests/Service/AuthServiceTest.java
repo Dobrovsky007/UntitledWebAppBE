@@ -3,6 +3,7 @@ package UnitTests.Service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.webapp.Eventified.dto.user.mailing.AbstractEmailContext;
 import com.webapp.Eventified.dto.user.LoginRequest;
 import com.webapp.Eventified.dto.user.LoginResponse;
 import com.webapp.Eventified.model.SecureTokenEmail;
@@ -11,11 +12,15 @@ import com.webapp.Eventified.repository.AuthRepository;
 import com.webapp.Eventified.repository.SecureTokenRepository;
 import com.webapp.Eventified.repository.UserRepository;
 import com.webapp.Eventified.service.AuthService;
+import com.webapp.Eventified.service.EmailService;
+import com.webapp.Eventified.service.SecureTokenService;
 import com.webapp.Eventified.util.JWTutil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -28,6 +33,8 @@ class AuthServiceTest {
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
     private JWTutil jwtutil;
+    private SecureTokenService secureTokenService;
+    private EmailService emailService;
     private AuthService authService;
 
     @BeforeEach
@@ -37,21 +44,36 @@ class AuthServiceTest {
         userRepository = mock(UserRepository.class);
         passwordEncoder = new BCryptPasswordEncoder();
         jwtutil = mock(JWTutil.class);
-        authService = new AuthService(authRepository, passwordEncoder, jwtutil, null, secureTokenRepository, userRepository, null);
+        secureTokenService = mock(SecureTokenService.class);
+        emailService = mock(EmailService.class);
+
+        authService = new AuthService(authRepository, passwordEncoder, jwtutil, secureTokenService, secureTokenRepository, userRepository, emailService);
     }
 
     @Test
     @DisplayName("Should successfully register user with valid credentials")
-    void registerUser_success() {
+    void registerUser_success() throws Exception {
         // Arrange
         String username = "testuser";
         String email = "test@example.com";
         String password = "password123";
 
+        // AuthService relies on a Spring-injected @Value for baseUrl.
+        // In pure unit tests we set it explicitly to keep behavior deterministic.
+        ReflectionTestUtils.setField(authService, "baseUrl", "http://localhost:8080");
+
+        SecureTokenEmail generatedToken = new SecureTokenEmail();
+        generatedToken.setToken("test-token");
+        generatedToken.setExpiresAt(LocalDateTime.now().plusHours(1));
+
         when(authRepository.findByEmail(email)).thenReturn(Optional.empty());
         when(authRepository.findByUsername(username)).thenReturn(Optional.empty());
         when(authRepository.save(any(User.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
+
+        when(secureTokenService.createSecureToken()).thenReturn(generatedToken);
+        when(secureTokenRepository.save(any(SecureTokenEmail.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        doNothing().when(emailService).sendEmail(any(AbstractEmailContext.class));
 
         // Act
         User user = authService.registerUser(username, email, password);
@@ -63,11 +85,19 @@ class AuthServiceTest {
             () -> assertTrue(passwordEncoder.matches(password, user.getPasswordHash()), 
                 "Password should be hashed correctly")
         );
+
+        ArgumentCaptor<SecureTokenEmail> secureTokenCaptor = ArgumentCaptor.forClass(SecureTokenEmail.class);
+        verify(secureTokenRepository).save(secureTokenCaptor.capture());
+        assertSame(user, secureTokenCaptor.getValue().getUser(), "Secure token should be associated to saved user");
+        assertEquals("test-token", secureTokenCaptor.getValue().getToken(), "Secure token value should be used");
+
+        verify(emailService).sendEmail(any(AbstractEmailContext.class));
         
         // Verify
         verify(authRepository).findByEmail(email);
         verify(authRepository).findByUsername(username);
         verify(authRepository).save(any(User.class));
+        verify(secureTokenService).createSecureToken();
     }
 
     @Test
@@ -91,6 +121,8 @@ class AuthServiceTest {
         // Verify
         verify(authRepository).findByEmail(email);
         verify(authRepository, never()).save(any());
+        verifyNoInteractions(secureTokenService);
+        verifyNoInteractions(emailService);
     }
 
     @Test
@@ -116,6 +148,8 @@ class AuthServiceTest {
         verify(authRepository).findByEmail(email);
         verify(authRepository).findByUsername(username);
         verify(authRepository, never()).save(any());
+        verifyNoInteractions(secureTokenService);
+        verifyNoInteractions(emailService);
     }
 
     @Test
