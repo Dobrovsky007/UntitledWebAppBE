@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,6 +73,20 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Event created successfully");
 
         } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{eventId}")
+    public ResponseEntity<?> deleteEvent(@PathVariable UUID eventId, Authentication authentication){
+
+        String username = authentication.getName();
+
+        try{
+            eventService.cancelEvent(eventId, username);
+            return ResponseEntity.ok("Event cancelled successfully");
+        } 
+        catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -256,7 +271,7 @@ public class EventController {
 
     @GetMapping("/details/{eventId}")
     public ResponseEntity<?> getEventDetails(@PathVariable UUID eventId){
-        
+
         if (eventService.getEventDetails(eventId).equals(null)) {
             return ResponseEntity.status(500).body("Event not found");
         } else{

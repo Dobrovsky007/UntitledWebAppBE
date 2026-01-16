@@ -29,6 +29,7 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<jacoco.version>0.8.12</jacoco.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -148,6 +149,96 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>com/webapp/Eventified/service/**</include>
+								<include>com/webapp/Eventified/service/recommendation/**</include>
+								<include>com/webapp/Eventified/util/**</include>
+								<include>com/webapp/Eventified/controller/**</include>
+							</includes>
+							<excludes>
+								<exclude>*MockitoMock*</exclude>
+								<exclude>net/bytebuddy/**</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>com/webapp/Eventified/service/**</include>
+								<include>com/webapp/Eventified/service/recommendation/**</include>
+								<include>com/webapp/Eventified/util/**</include>
+								<include>com/webapp/Eventified/controller/**</include>
+							</includes>
+							<excludes>
+								<exclude>**/*Application*</exclude>
+								<exclude>**/config/**</exclude>
+								<exclude>**/dto/**</exclude>
+								<exclude>**/entity/**</exclude>
+								<exclude>**/model/**</exclude>
+								<exclude>**/repository/**</exclude>
+								<exclude>**/exception/**</exclude>
+								<exclude>**/service/EmailService*</exclude>
+								<exclude>**/service/RatingPromptScheduler*</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>com/webapp/Eventified/service/**</include>
+								<include>com/webapp/Eventified/service/recommendation/**</include>
+								<include>com/webapp/Eventified/util/**</include>
+								<include>com/webapp/Eventified/controller/**</include>
+							</includes>
+							<excludes>
+								<exclude>**/*Application*</exclude>
+								<exclude>**/config/**</exclude>
+								<exclude>**/dto/**</exclude>
+								<exclude>**/entity/**</exclude>
+								<exclude>**/model/**</exclude>
+								<exclude>**/repository/**</exclude>
+								<exclude>**/exception/**</exclude>
+								<exclude>**/service/EmailService*</exclude>
+								<exclude>**/service/RatingPromptScheduler*</exclude>
+							</excludes>
+							<rules>
+								<rule>
+									<element>BUNDLE</element>
+									<limits>
+										<limit>
+											<counter>INSTRUCTION</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.85</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
