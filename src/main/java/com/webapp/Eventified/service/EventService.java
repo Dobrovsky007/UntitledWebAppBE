@@ -318,8 +318,7 @@ public class EventService {
                                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
 
                 if (event.getOrganizer().getId().equals(user.getId())) {
-                        event.setStatusOfEvent(3);
-                        eventRepository.save(event);
+                        eventRepository.delete(event);
                         notificationService.notifyEventCancelled(event);
                         return true;
                 } else {
