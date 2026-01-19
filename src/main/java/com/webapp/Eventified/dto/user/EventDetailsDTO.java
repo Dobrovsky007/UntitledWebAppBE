@@ -27,12 +27,3 @@ public class EventDetailsDTO {
     private Boolean rated;
 }
 
-class OrganizerDTO {
-    public String username;
-    public UUID id;
-    
-    public OrganizerDTO(String username, UUID id) {
-        this.username = username;
-        this.id = id;
-    }
-}
