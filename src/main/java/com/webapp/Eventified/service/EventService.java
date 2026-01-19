@@ -13,6 +13,7 @@ import com.webapp.Eventified.dto.user.EventDetailsDTO;
 import com.webapp.Eventified.dto.user.EventParticipantDTO;
 import com.webapp.Eventified.dto.user.EventPoolDTO;
 import com.webapp.Eventified.dto.user.EventUpdateRequest;
+import com.webapp.Eventified.dto.user.OrganizerDTO;
 import com.webapp.Eventified.model.Event;
 import com.webapp.Eventified.model.User;
 import com.webapp.Eventified.repository.EventParticipantRepository;
@@ -364,7 +365,7 @@ public class EventService {
                 
                 // Set organizer info
                 if (event.getOrganizer() != null) {
-                        dto.setOrganizer(new com.webapp.Eventified.dto.user.OrganizerDTO(
+                        dto.setOrganizer(new OrganizerDTO(
                                 event.getOrganizer().getUsername(),
                                 event.getOrganizer().getId()
                         ));
