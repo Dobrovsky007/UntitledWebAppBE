@@ -348,6 +348,7 @@ public class EventService {
 
         private EventDetailsDTO mapToEventDetailsDTO(Event event){
                 EventDetailsDTO dto = new EventDetailsDTO();
+                dto.setId(event.getId());
                 dto.setTitle(event.getTitle());
                 dto.setSport(event.getSport());
                 dto.setAddress(event.getAddress());
@@ -358,6 +359,17 @@ public class EventService {
                 dto.setSkillLevel(event.getSkillLevel());
                 dto.setLatitude(event.getLatitude());
                 dto.setLongitude(event.getLongitude());
+                dto.setStatusOfEvent(event.getStatusOfEvent());
+                dto.setRated(event.getRated());
+                
+                // Set organizer info
+                if (event.getOrganizer() != null) {
+                        dto.setOrganizer(new com.webapp.Eventified.dto.user.OrganizerDTO(
+                                event.getOrganizer().getUsername(),
+                                event.getOrganizer().getId()
+                        ));
+                }
+                
                 dto.setParticipants(event.getParticipants()
                                 .stream()
                                 .map(ep -> {
