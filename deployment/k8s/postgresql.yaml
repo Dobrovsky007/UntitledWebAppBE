@@ -24,7 +24,10 @@ spec:
             - name: POSTGRES_USER
               value: "eventified_admin"
             - name: POSTGRES_PASSWORD
-              value: "materinaduska"
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-secret
+                  key: POSTGRES_PASSWORD
             - name: PGDATA
               value: "/var/lib/postgresql/data/pgdata"
           ports:

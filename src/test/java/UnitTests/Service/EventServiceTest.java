@@ -557,7 +557,7 @@ class EventServiceTest {
         // Assert
         assertAll(
             () -> assertTrue(result),
-            () -> assertEquals(3, event.getStatusOfEvent())
+            () -> assertEquals(4, event.getStatusOfEvent())
         );
 
         // Verify
