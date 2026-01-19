@@ -347,6 +347,20 @@ public class EventService {
                 return mapToEventDetailsDTO(event);
         }
 
+        public List<EventParticipantDTO> getEventParticipants(UUID eventId){
+                Event event = eventRepository.findById(eventId)
+                                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        
+                return event.getParticipants()
+                                .stream()
+                                .map(ep -> {
+                                        EventParticipantDTO participantDTO = new EventParticipantDTO();
+                                        participantDTO.setUsername(ep.getUser().getUsername());
+                                        return participantDTO;
+                                })
+                                .collect(Collectors.toList());
+        }
+
         private EventDetailsDTO mapToEventDetailsDTO(Event event){
                 EventDetailsDTO dto = new EventDetailsDTO();
                 dto.setId(event.getId());

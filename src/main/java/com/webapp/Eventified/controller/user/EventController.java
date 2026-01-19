@@ -270,4 +270,9 @@ public class EventController {
             return ResponseEntity.ok(eventService.getEventDetails(eventId));
         }
     }
+
+    @GetMapping("/{eventId}/participants")
+    public ResponseEntity<?> getEventParticipants(@PathVariable UUID eventId){
+        return ResponseEntity.ok(eventService.getEventParticipants(eventId));
+    }
 }
