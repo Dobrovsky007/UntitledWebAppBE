@@ -237,13 +237,6 @@ public class EventController {
             @RequestParam (required = false) Integer freeSlots){
 
         try {
-            System.out.println("=== Filter endpoint called ===");
-            System.out.println("Sports param: " + sports);
-            System.out.println("Skill Levels param: " + skillLevels);
-            System.out.println("Start Time After: " + startTimeAfter);
-            System.out.println("End Time Before: " + endTimeBefore);
-            System.out.println("Free Slots: " + freeSlots);
-            
             LocalDateTime startTimeAfterParsed = startTimeAfter != null ? LocalDateTime.parse(startTimeAfter) : null;
             LocalDateTime endTimeBeforeParsed = endTimeBefore != null ? LocalDateTime.parse(endTimeBefore) : null;
 
@@ -252,7 +245,6 @@ public class EventController {
             return ResponseEntity.ok(filteredEvents);
         } catch (Exception e){
             System.err.println("Error in filter endpoint: " + e.getClass().getName() + " - " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid filter parameters: " + e.getClass().getName() + " - " + e.getMessage());
         }
     }

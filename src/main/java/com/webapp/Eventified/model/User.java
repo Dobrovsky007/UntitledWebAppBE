@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@ToString(exclude = { "sports", "organizedEvents", "eventParticipations" })
+@ToString(exclude = { "passwordHash", "sports", "organizedEvents", "eventParticipations" })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")

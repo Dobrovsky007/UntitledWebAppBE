@@ -69,10 +69,7 @@ public class AuthService {
  
         try {
             sendRegistrationEmail(savedUser);
-            System.out.println("Verification email sent successfully");
         } catch (Exception e) {
-            System.out.println("Could not send verification email: " + e.getMessage());
-            System.out.println("User registered successfully but email verification is disabled");
         }
 
         return savedUser;

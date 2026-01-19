@@ -252,22 +252,11 @@ public class EventService {
                         LocalDateTime startTimeAfter,
                         LocalDateTime endTimeBefore,
                         Integer freeSlots) {
-                System.out.println("=== Filter Request Received ===");
-                System.out.println("Sports: " + sports);
-                System.out.println("Skill Levels: " + skillLevels);
-                System.out.println("Start Time After: " + startTimeAfter);
-                System.out.println("End Time Before: " + endTimeBefore);
-                System.out.println("Free Slots: " + freeSlots);
-                
                 List<Event> events = eventRepository.findAll();
-                System.out.println("Total events in database: " + events.size());
 
                 List<EventPoolDTO> filteredEvents = events.stream()
                                 .filter(event -> {
                                         boolean match = sports == null || sports.isEmpty() || sports.contains(event.getSport());
-                                        if (!match) {
-                                                System.out.println("Event '" + event.getTitle() + "' filtered out by sport. Event sport: " + event.getSport() + ", looking for: " + sports);
-                                        }
                                         return match;
                                 })
                                 .filter(event -> skillLevels == null || skillLevels.isEmpty()
@@ -277,8 +266,6 @@ public class EventService {
                                 .filter(event -> freeSlots == null || event.getCapacity() - event.getOccupied() >= freeSlots)
                                 .map(EventPoolDTO::new)
                                 .toList();
-
-                System.out.println("Filtered events count: " + filteredEvents.size());
                 return filteredEvents;
         }
 
