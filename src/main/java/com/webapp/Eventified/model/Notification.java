@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,6 +58,7 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @JsonIgnoreProperties({"participants", "organizer", "organizedEvents", "eventParticipations", "sports", "tokens", "sentFriendRequests", "receivedFriendRequests"})
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = true)
     private Event event;
