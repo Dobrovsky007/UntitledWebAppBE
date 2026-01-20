@@ -33,33 +33,24 @@ public class NotificationController {
      * Retrieves all notifications for the authenticated user.
      *
      * @param authetication the Spring Security authentication object containing user credentials
-     * @return ResponseEntity containing all user notifications or error if none found
+     * @return ResponseEntity containing all user notifications (empty array if none found)
      */
     @GetMapping("/all")
     public ResponseEntity<?> getUserNotifications(Authentication authetication){
         String username = authetication.getName();
-        if(notificationService.getUserNotifications(username).isEmpty()){
-            return ResponseEntity.status(500).body("No notifications found for user");
-        } else{
-            return ResponseEntity.ok(notificationService.getUserNotifications(username));
-        }
+        return ResponseEntity.ok(notificationService.getUserNotifications(username));
     }
 
     /**
      * Retrieves only unread notifications for the authenticated user.
      *
      * @param authetication the Spring Security authentication object containing user credentials
-     * @return ResponseEntity containing unread notifications or error if none found
+     * @return ResponseEntity containing unread notifications (empty array if none found)
      */
     @GetMapping("/unread")
     public ResponseEntity<?> getUserUnreadNotifications(Authentication authetication){
         String username = authetication.getName();
-
-        if(notificationService.getUnreadUserNotifications(username).isEmpty()){
-            return ResponseEntity.status(500).body("No unread notifications found for user");
-        } else{
-            return ResponseEntity.ok(notificationService.getUnreadUserNotifications(username));
-        }
+        return ResponseEntity.ok(notificationService.getUnreadUserNotifications(username));
     }
 
     /**
