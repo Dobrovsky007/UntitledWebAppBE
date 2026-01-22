@@ -78,6 +78,13 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+        try {
+            return ResponseEntity.ok(authService.login(request));
+        } catch (IllegalArgumentException e) {
+            if ("Please verify your email before logging in".equals(e.getMessage())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
     }
 }
