@@ -118,10 +118,10 @@ public class AuthService {
      */
     public LoginResponse login(LoginRequest request) {
         User user = authRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Username not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new IllegalArgumentException("Invalid username or password");
         }
 
         if (!user.isVerified()) {

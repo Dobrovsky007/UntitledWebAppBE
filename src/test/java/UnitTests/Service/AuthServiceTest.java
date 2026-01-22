@@ -194,7 +194,7 @@ class AuthServiceTest {
         );
 
         // Assert
-        assertEquals("Username not found", exception.getMessage());
+        assertEquals("Invalid username or password", exception.getMessage());
 
         // Verify
         verify(authRepository).findByUsername(username);
@@ -221,7 +221,7 @@ class AuthServiceTest {
         );
 
         // Assert
-        assertEquals("Invalid credentials", exception.getMessage());
+        assertEquals("Invalid username or password", exception.getMessage());
 
         // Verify
         verify(authRepository).findByUsername(username);
